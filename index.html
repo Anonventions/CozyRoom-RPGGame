@@ -1816,6 +1816,11 @@
         function performActivity(activity) {
             gameState.dailyActivitiesDone++;
             
+            // Complete the do_activity quest on first activity
+            if (!quests.find(q => q.id === 'do_activity').completed) {
+                completeQuest('do_activity');
+            }
+            
             switch(activity) {
                 case 'drawing':
                     rpgStats.creativity += 10;
@@ -1881,6 +1886,11 @@
 
         function playMovieScene(movieType) {
             const cinematicFade = document.getElementById('cinematicFade');
+            
+            // Complete watch_movie quest
+            if (!quests.find(q => q.id === 'watch_movie').completed) {
+                completeQuest('watch_movie');
+            }
             
             // Fade to black
             cinematicFade.classList.remove('fade-out');
@@ -2074,6 +2084,9 @@
             { id: 'cake', name: 'Find the Cake 🍰', completed: false, xp: 15 },
             { id: 'wine', name: 'Find the Wine 🍷', completed: false, xp: 15 },
             { id: 'letter', name: 'Read the Letter 💌', completed: false, xp: 20 },
+            { id: 'talk_to_him', name: 'Have a conversation with Amon 💬', completed: false, xp: 10 },
+            { id: 'do_activity', name: 'Complete a daily activity 🎨', completed: false, xp: 15 },
+            { id: 'watch_movie', name: 'Watch a movie together 🎬', completed: false, xp: 25 },
             { id: 'kiss', name: 'Kiss Him 💋', completed: false, xp: 30 },
             { id: 'sleep', name: 'Sleep Together 😴', completed: false, xp: 50 }
         ];
@@ -2195,6 +2208,10 @@
                                     showDialog("You're gonna stain my pixel bed with glitter too???", 'him', false);
                                     setTimeout(() => {
                                         hideDialog();
+                                        completeQuest('talk_to_him');
+                                        setTimeout(() => {
+                                            showTutorialHint();
+                                        }, 1000);
                                         startIdleTimer();
                                     }, 2500);
                                 }
@@ -2207,6 +2224,10 @@
                                     showDialog("Yes ma'am", 'him', false);
                                     setTimeout(() => {
                                         hideDialog();
+                                        completeQuest('talk_to_him');
+                                        setTimeout(() => {
+                                            showTutorialHint();
+                                        }, 1000);
                                         startIdleTimer();
                                     }, 2500);
                                 }
@@ -2219,6 +2240,10 @@
                                     showDialog("You're so cute", 'him', false);
                                     setTimeout(() => {
                                         hideDialog();
+                                        completeQuest('talk_to_him');
+                                        setTimeout(() => {
+                                            showTutorialHint();
+                                        }, 1000);
                                         startIdleTimer();
                                     }, 2500);
                                 }
@@ -2227,6 +2252,11 @@
                     }, 500);
                 }, 2500);
             }, 2000);
+        }
+
+        function showTutorialHint() {
+            showDialog("Alright, explore the room and find all the items I left for you. Use WASD to move around, and click the PC desk (or press E) if you want to do activities together! 💕", 'him', false);
+            setTimeout(hideDialog, 4000);
         }
 
         function updateStatsUI() {
@@ -2684,13 +2714,21 @@
                 addLove(25);
                 
                 setTimeout(() => {
-                    const letter = document.getElementById('letter');
-                    letter.style.display = 'block';
-                    for (let i = 0; i < 6; i++) {
+                    // Add a special dialogue when all items are collected
+                    hideDialog();
+                    setTimeout(() => {
+                        showDialog("You found everything! Now check the center of the room for one last thing... 💌", 'him', false);
                         setTimeout(() => {
-                            createEffect('sparkle', letter.offsetLeft + 24, letter.offsetTop + 24);
-                        }, i * 180);
-                    }
+                            hideDialog();
+                            const letter = document.getElementById('letter');
+                            letter.style.display = 'block';
+                            for (let i = 0; i < 6; i++) {
+                                setTimeout(() => {
+                                    createEffect('sparkle', letter.offsetLeft + 24, letter.offsetTop + 24);
+                                }, i * 180);
+                            }
+                        }, 2500);
+                    }, 1000);
                 }, 1200);
             }
         }
@@ -2700,13 +2738,26 @@
             playSound('click');
             
             if (!gameState.isNearHim) {
-                showDialog("Finish your tasks and then come close to me, dummy!!! 💕", 'him', false);
+                const randomMessages = [
+                    "Come closer first, I can't hear you from there! 💕",
+                    "Walk over here so we can chat properly, baby! 😊",
+                    "I'm waiting for you to come to me, princess! 💖"
+                ];
+                const randomMsg = randomMessages[Math.floor(Math.random() * randomMessages.length)];
+                showDialog(randomMsg, 'him', false);
                 setTimeout(hideDialog, 2500);
                 return;
             }
             
             if (!gameState.allItemsCollected || !gameState.itemsCollected.includes('letter')) {
-                showDialog("Find all the items and read the letter first, my love! 💕", 'him', false);
+                const encouragementMessages = [
+                    "Keep looking around for all the items, my love! 💕",
+                    "I've hidden special things for you to find! 🎁",
+                    "There's still more to discover in our room! ✨",
+                    "Find all my gifts first, then we can be closer! 💖"
+                ];
+                const randomMsg = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
+                showDialog(randomMsg, 'him', false);
                 setTimeout(hideDialog, 2500);
                 return;
             }
