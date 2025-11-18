@@ -1331,7 +1331,7 @@
 
         .activity-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -1501,6 +1501,18 @@
             <button class="activity-btn" data-activity="movie">
                 <span class="activity-icon">🎬</span>
                 Watch Movie<br><small>+Love</small>
+            </button>
+            <button class="activity-btn" data-activity="valorant">
+                <span class="activity-icon">🎮</span>
+                Play Valorant<br><small>+Skills</small>
+            </button>
+            <button class="activity-btn" data-activity="minecraft">
+                <span class="activity-icon">⛏️</span>
+                Play Minecraft<br><small>+Creativity</small>
+            </button>
+            <button class="activity-btn" data-activity="talk">
+                <span class="activity-icon">💬</span>
+                Deep Talk<br><small>+Love</small>
             </button>
         </div>
         <button class="close-info-btn" id="closeActivity">Close</button>
@@ -1843,9 +1855,185 @@
                 case 'movie':
                     watchMovieSequence();
                     break;
+                case 'valorant':
+                    playValorantSequence();
+                    break;
+                case 'minecraft':
+                    playMinecraftSequence();
+                    break;
+                case 'talk':
+                    deepTalkSequence();
+                    break;
             }
             
             updateStatsUI();
+        }
+
+        function playValorantSequence() {
+            showDialog("Ready to queue up for a ranked match? 🎮", 'him', false);
+            setTimeout(() => {
+                hideDialog();
+                setTimeout(() => {
+                    showDialogueChoices('valorant', [
+                        { 
+                            text: 'Play Duelist 💥', 
+                            class: 'flirty',
+                            response: "I'll carry you baby, watch me pop off!",
+                            callback: () => {
+                                showDialog("That's my girl! Let's ace this round! 🔥", 'him', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    rpgStats.skills += 15;
+                                    addXP(25);
+                                    addLove(10);
+                                    updateStatsUI();
+                                    setTimeout(() => {
+                                        showDialog("GG! You got 30 kills! I'm so proud! 💕", 'him', false);
+                                        setTimeout(hideDialog, 2500);
+                                    }, 1000);
+                                }, 2500);
+                            }
+                        },
+                        { 
+                            text: 'Play Support 🛡️', 
+                            class: 'playful',
+                            response: "I'll support you, you go frag!",
+                            callback: () => {
+                                showDialog("Perfect! I'll entry and you got my back! 💪", 'him', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    rpgStats.skills += 10;
+                                    addXP(20);
+                                    addLove(15);
+                                    updateStatsUI();
+                                    setTimeout(() => {
+                                        showDialog("We won! Your heals saved me so many times! 💖", 'him', false);
+                                        setTimeout(hideDialog, 2500);
+                                    }, 1000);
+                                }, 2500);
+                            }
+                        }
+                    ]);
+                }, 500);
+            }, 2500);
+        }
+
+        function playMinecraftSequence() {
+            showDialog("Let's build something together! What should we make? ⛏️", 'him', false);
+            setTimeout(() => {
+                hideDialog();
+                setTimeout(() => {
+                    showDialogueChoices('minecraft', [
+                        { 
+                            text: 'Build a House 🏠', 
+                            class: 'flirty',
+                            response: "Let's make our dream home!",
+                            callback: () => {
+                                showDialog("I'll gather wood, you start the foundation! 🌲", 'him', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    rpgStats.creativity += 20;
+                                    addXP(25);
+                                    addLove(15);
+                                    updateStatsUI();
+                                    setTimeout(() => {
+                                        showDialog("It's beautiful! We built this together 💕", 'him', false);
+                                        setTimeout(hideDialog, 2500);
+                                    }, 1000);
+                                }, 2500);
+                            }
+                        },
+                        { 
+                            text: 'Go Mining ⛏️', 
+                            class: 'playful',
+                            response: "Let's find diamonds together!",
+                            callback: () => {
+                                showDialog("Adventure time! I'll protect you from creepers! 💪", 'him', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    rpgStats.skills += 10;
+                                    rpgStats.creativity += 10;
+                                    addXP(20);
+                                    addLove(10);
+                                    updateStatsUI();
+                                    setTimeout(() => {
+                                        showDialog("We found diamonds! And didn't die once! 💎", 'him', false);
+                                        setTimeout(hideDialog, 2500);
+                                    }, 1000);
+                                }, 2500);
+                            }
+                        }
+                    ]);
+                }, 500);
+            }, 2500);
+        }
+
+        function deepTalkSequence() {
+            const talkTopics = [
+                {
+                    question: "What's your biggest dream in life, princess? ✨",
+                    options: [
+                        {
+                            text: "Travel the world 🌍",
+                            response: "I want to see everything with you!",
+                            reply: "We'll explore every corner together, I promise 💕"
+                        },
+                        {
+                            text: "Build a family 👨‍👩‍👧",
+                            response: "I want to build a life with you",
+                            reply: "You're already my family, baby. Forever and always 💖"
+                        },
+                        {
+                            text: "Follow my passion 🎨",
+                            response: "I want to pursue what makes me happy",
+                            reply: "I'll support every step of your journey 💪"
+                        }
+                    ]
+                },
+                {
+                    question: "What do you love most about us? 💕",
+                    options: [
+                        {
+                            text: "How we understand each other 🤝",
+                            response: "You just get me, you know?",
+                            reply: "Because you're my other half, princess 💖"
+                        },
+                        {
+                            text: "Our silly moments 😂",
+                            response: "I love how we can be goofy together",
+                            reply: "You bring out the best kind of chaos in me! 😄"
+                        },
+                        {
+                            text: "The deep connection 💫",
+                            response: "I feel so connected to you",
+                            reply: "Our souls recognized each other, baby 💕"
+                        }
+                    ]
+                }
+            ];
+            
+            const topic = talkTopics[Math.floor(Math.random() * talkTopics.length)];
+            
+            showDialog(topic.question, 'him', false);
+            setTimeout(() => {
+                hideDialog();
+                setTimeout(() => {
+                    showDialogueChoices('deep_talk', topic.options.map(opt => ({
+                        text: opt.text,
+                        class: 'flirty',
+                        response: opt.response,
+                        callback: () => {
+                            showDialog(opt.reply, 'him', false);
+                            setTimeout(() => {
+                                hideDialog();
+                                addLove(20);
+                                addXP(30);
+                                updateStatsUI();
+                            }, 3000);
+                        }
+                    })));
+                }, 500);
+            }, 2500);
         }
 
         function watchMovieSequence() {
@@ -1877,6 +2065,30 @@
                             response: "I need a good laugh today!",
                             callback: () => {
                                 playMovieScene('comedy');
+                            }
+                        },
+                        { 
+                            text: 'Action Movie 💥', 
+                            class: 'playful',
+                            response: "Let's watch some epic action!",
+                            callback: () => {
+                                playMovieScene('action');
+                            }
+                        },
+                        { 
+                            text: 'Anime 🎌', 
+                            class: 'flirty',
+                            response: "Wanna watch some anime together?",
+                            callback: () => {
+                                playMovieScene('anime');
+                            }
+                        },
+                        { 
+                            text: 'Sci-Fi 🚀', 
+                            class: 'playful',
+                            response: "Let's explore the universe!",
+                            callback: () => {
+                                playMovieScene('scifi');
                             }
                         }
                     ]);
@@ -1910,6 +2122,18 @@
                     comedy: {
                         him: "That was hilarious! Your laugh is the best part though 😊",
                         her: "Stop being so sweet, you're making me blush! ☺️"
+                    },
+                    action: {
+                        him: "That explosion scene was INSANE! 💥",
+                        her: "I know right! My heart was racing! 🔥"
+                    },
+                    anime: {
+                        him: "The animation was so beautiful! 🎌",
+                        her: "We should cosplay those characters! 💕"
+                    },
+                    scifi: {
+                        him: "Mind = blown! That plot twist! 🤯",
+                        her: "I told you this one was amazing! 🚀"
                     }
                 };
                 
@@ -2041,6 +2265,7 @@
             creativity: 0,
             intelligence: 0,
             energy: 0,
+            skills: 0,
             achievements: [],
             inventory: []
         };
@@ -2762,7 +2987,25 @@
                 return;
             }
             
-            if (gameState.kissAnimating || quests.find(q => q.id === 'kiss').completed) return;
+            // Allow kissing multiple times, but only animate if not currently animating
+            if (gameState.kissAnimating) return;
+            
+            // If already kissed before, show different dialogues
+            if (quests.find(q => q.id === 'kiss').completed) {
+                const repeatKissDialogues = [
+                    "Again? You're so needy... I love it 💕",
+                    "Can't get enough of me, huh? 😏",
+                    "You're making me blush again! 😊",
+                    "My lips are yours anytime, princess 💋"
+                ];
+                const randomMsg = repeatKissDialogues[Math.floor(Math.random() * repeatKissDialogues.length)];
+                showDialog(randomMsg, 'him', false);
+                setTimeout(() => {
+                    hideDialog();
+                    playKissAnimation(true); // Pass true to skip quest completion
+                }, 2500);
+                return;
+            }
             
             // Start kiss dialogue sequence
             showDialog("Touch me", 'him', false);
@@ -2848,7 +3091,7 @@
             }, 2500);
         }
 
-        function playKissAnimation() {
+        function playKissAnimation(skipQuestCompletion = false) {
             gameState.kissAnimating = true;
             gameState.canMove = false;
             kissRefusalCount = 0;
@@ -2892,24 +3135,32 @@
                         himSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/idle1.png';
                         herSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/smile_front.png';
                         
-                        showDialog("Thank you for everything, my beautiful girl. I love you so much! Now we can rest together... 💕💕💕", 'him', false);
-                        completeQuest('kiss');
-                        
-                        const quest = quests.find(q => q.id === 'kiss');
-                        if (quest) {
-                            addXP(quest.xp);
-                            addLove(30);
+                        // Only complete quest and show full message on first kiss
+                        if (!skipQuestCompletion) {
+                            showDialog("Thank you for everything, my beautiful girl. I love you so much! Now we can rest together... 💕💕💕", 'him', false);
+                            completeQuest('kiss');
+                            
+                            const quest = quests.find(q => q.id === 'kiss');
+                            if (quest) {
+                                addXP(quest.xp);
+                                addLove(30);
+                            }
+                            unlockAchievement('first_kiss');
+                            
+                            checkAllQuestsComplete();
+                        } else {
+                            // For repeat kisses, just add some love
+                            addLove(5);
                         }
-                        unlockAchievement('first_kiss');
-                        
-                        checkAllQuestsComplete();
                         
                         setTimeout(() => {
-                            hideDialog();
+                            if (!skipQuestCompletion) {
+                                hideDialog();
+                            }
                             gameState.kissAnimating = false;
                             gameState.canMove = true;
                             startHimIdleAnimation();
-                        }, 3500);
+                        }, skipQuestCompletion ? 500 : 3500);
                     }, 1200);
                 }
             }, 750);
@@ -2941,7 +3192,12 @@
                 return;
             }
             
-            if (gameState.isSleeping) return;
+            // Allow multiple sleep sessions
+            if (gameState.isSleeping) {
+                showDialog("Already cozy in bed... want to get up? 😴", 'him', false);
+                setTimeout(hideDialog, 2500);
+                return;
+            }
             
             // Start sleep dialogue sequence with choice
             showDialog("Les eep princess", 'him', false);
