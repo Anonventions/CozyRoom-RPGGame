@@ -174,6 +174,46 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
+        /* Mute Toggle Switch */
+        .mute-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.3);
+            padding: 12px 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(30px);
+        }
+
         .theme-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -878,6 +918,12 @@
             top: 100px;
             right: 250px;
             z-index: 10;
+            cursor: pointer;
+            transition: filter 0.3s;
+        }
+
+        #pcTable:hover {
+            filter: brightness(1.2) drop-shadow(0 0 15px rgba(138,43,226,0.8));
         }
 
         #gamingChair {
@@ -1254,6 +1300,132 @@
                 transform: translateY(-80px) translateX(20px) scale(1.2);
             }
         }
+
+        /* Activity Selection UI */
+        #activityPanel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 600px;
+            background: linear-gradient(135deg, rgba(255,105,180,0.98), rgba(255,20,147,0.98));
+            padding: 30px;
+            border-radius: 20px;
+            z-index: 2000;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 3px solid rgba(255,182,193,0.8);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #activityPanel.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #activityPanel h2 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .activity-btn {
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            color: white;
+            font-family: 'Quaver', Arial;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .activity-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+            border-color: #ffd700;
+        }
+
+        .activity-btn .activity-icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Item Info Panel */
+        #itemInfoPanel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 500px;
+            background: linear-gradient(135deg, rgba(138,43,226,0.98), rgba(75,0,130,0.98));
+            padding: 30px;
+            border-radius: 20px;
+            z-index: 2500;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 3px solid rgba(186,85,211,0.8);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #itemInfoPanel.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #itemInfoPanel h3 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        #itemInfoIcon {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        #itemInfoText {
+            color: white;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        #itemInfoGiver {
+            color: #ffd700;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .close-info-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-family: 'Quaver', Arial;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-info-btn:hover {
+            background: linear-gradient(135deg, #ff1493, #c71585);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -1264,8 +1436,8 @@
     <div id="endGameScreen">
         <h2>Sweet dreams princess 💕😴</h2>
         <div class="end-game-buttons">
-            <button class="end-game-btn play-again" onclick="playSound('click'); location.reload();">Play Again 🔄</button>
-            <button class="end-game-btn stay" onclick="playSound('click');">Stay Here 💖</button>
+            <button class="end-game-btn play-again" id="playAgainBtn">Play Again 🔄</button>
+            <button class="end-game-btn stay" id="stayBtn">Stay Here 💖</button>
         </div>
     </div>
 
@@ -1276,6 +1448,16 @@
     <div id="settingsPanel">
         <h2>⚙️ Settings</h2>
         
+        <div class="setting-group">
+            <label>🔊 Sound:</label>
+            <div class="mute-toggle">
+                <span style="color: white;">Mute Sounds</span>
+                <div class="toggle-switch" id="muteToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="setting-group">
             <label>🎨 Room Theme:</label>
             <div class="theme-buttons">
@@ -1300,6 +1482,51 @@
         <button id="closeSettings" onclick="playSound('click')">Close Settings</button>
     </div>
 
+    <!-- Activity Selection Panel -->
+    <div id="activityPanel">
+        <h2>💖 Choose Your Activity</h2>
+        <div class="activity-grid">
+            <button class="activity-btn" data-activity="drawing">
+                <span class="activity-icon">🎨</span>
+                Drawing<br><small>+Creativity</small>
+            </button>
+            <button class="activity-btn" data-activity="watch a documentary">
+                <span class="activity-icon">📚</span>
+                watch a documentary<br><small>+Intelligence</small>
+            </button>
+            <button class="activity-btn" data-activity="workout">
+                <span class="activity-icon">💪</span>
+                Workout<br><small>+Energy</small>
+            </button>
+            <button class="activity-btn" data-activity="movie">
+                <span class="activity-icon">🎬</span>
+                Watch Movie<br><small>+Love</small>
+            </button>
+            <button class="activity-btn" data-activity="valorant">
+                <span class="activity-icon">🎮</span>
+                Play Valorant<br><small>+Skills</small>
+            </button>
+            <button class="activity-btn" data-activity="minecraft">
+                <span class="activity-icon">⛏️</span>
+                Play Minecraft<br><small>+Creativity</small>
+            </button>
+            <button class="activity-btn" data-activity="talk">
+                <span class="activity-icon">💬</span>
+                Deep Talk<br><small>+Love</small>
+            </button>
+        </div>
+        <button class="close-info-btn" id="closeActivity">Close</button>
+    </div>
+
+    <!-- Item Info Panel -->
+    <div id="itemInfoPanel">
+        <h3 id="itemInfoTitle">Item Info</h3>
+        <div id="itemInfoIcon"></div>
+        <div id="itemInfoText"></div>
+        <div id="itemInfoGiver"></div>
+        <button class="close-info-btn" id="closeItemInfo">Close</button>
+    </div>
+
     <!-- Loading Screen -->
     <div id="loadScreen">
         <div class="loading-heart" style="left: 10%; animation-delay: 0s;">💕</div>
@@ -1313,7 +1540,7 @@
         <div class="loading-heart" style="left: 90%; animation-delay: 0.8s;">💕</div>
         
         <h1>CozyBeds Vol.1</h1>
-        <div class="instruction">Use WASD or Arrow Keys to Move • Click ⚙️ for Settings</div>
+        <div class="instruction">Use WASD or Arrow Keys to Move • Click PC for Activities (E) • Click ⚙️ for Settings</div>
         <div class="loading-bar-container">
             <div class="loading-bar"></div>
         </div>
@@ -1333,16 +1560,16 @@
             </div>
         </div>
         <div class="stat-row">
+            <span class="stat-label">Creativity:</span>
+            <span class="stat-value" id="creativityStat">0</span>
+        </div>
+        <div class="stat-row">
             <span class="stat-label">XP:</span>
             <span class="stat-value"><span id="currentXP">0</span> / <span id="maxXP">100</span></span>
         </div>
         <div class="stat-row">
             <span class="stat-label">Items Found:</span>
             <span class="stat-value" id="itemsFound">0 / 7</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">Achievements:</span>
-            <span class="stat-value" id="achievementCount">0 / 12</span>
         </div>
     </div>
 
@@ -1371,7 +1598,7 @@
             
             <img id="bed" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/bed.png" alt="Bed">
             <div id="bedHint">Click to Sleep Together 😴💕</div>
-            <img id="pcTable" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/pc_table.png" alt="PC Table">
+            <img id="pcTable" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/pc_table.png" alt="PC Table" title="Click to choose activities (or press E)">
             <img id="gamingChair" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/gaming_chair.png" alt="Gaming Chair">
             <img id="rightSideTable" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/right_side_table.png" alt="Side Table">
 
@@ -1416,6 +1643,11 @@
     </div>
 
 <script>
+        // Game settings
+        let isMuted = false;
+        let lastClickTime = 0;
+        const CLICK_DEBOUNCE = 300; // milliseconds
+
         // Sound System using Howler.js (CDN)
         const sounds = {
             click: 'https://cdn.freesound.org/previews/221/221683_4245266-lq.mp3',
@@ -1425,8 +1657,19 @@
             ambient: 'https://cdn.freesound.org/previews/523/523609_6976839-lq.mp3'
         };
 
-        // Simple sound player
+        // Simple sound player with mute check
         function playSound(type) {
+            if (isMuted) return;
+            
+            // Prevent sound stacking
+            const now = Date.now();
+            if (type === 'collect' && now - lastClickTime < CLICK_DEBOUNCE) {
+                return;
+            }
+            if (type === 'collect') {
+                lastClickTime = now;
+            }
+            
             try {
                 const audio = new Audio(sounds[type]);
                 audio.volume = 0.3;
@@ -1438,19 +1681,35 @@
 
         // Play ambient sound on user interaction
         let ambientPlaying = false;
+        let ambientAudio = null;
         function playAmbient() {
-            if (!ambientPlaying) {
+            if (!ambientPlaying && !isMuted) {
                 try {
-                    const ambient = new Audio(sounds.ambient);
-                    ambient.volume = 0.1;
-                    ambient.loop = true;
-                    ambient.play().catch(e => console.log('Ambient prevented:', e));
+                    ambientAudio = new Audio(sounds.ambient);
+                    ambientAudio.volume = 0.1;
+                    ambientAudio.loop = true;
+                    ambientAudio.play().catch(e => console.log('Ambient prevented:', e));
                     ambientPlaying = true;
                 } catch (e) {
                     console.log('Ambient error:', e);
                 }
             }
         }
+
+        // Mute toggle functionality
+        document.getElementById('muteToggle').addEventListener('click', function() {
+            isMuted = !isMuted;
+            this.classList.toggle('active');
+            
+            // Stop or resume ambient
+            if (isMuted && ambientAudio) {
+                ambientAudio.pause();
+            } else if (!isMuted && ambientAudio) {
+                ambientAudio.play();
+            }
+            
+            playSound('click');
+        });
 
         // Theme Settings
         const themes = {
@@ -1542,6 +1801,369 @@
         document.getElementById('closeSettings').addEventListener('click', () => {
             document.getElementById('settingsPanel').classList.remove('show');
         });
+
+        // Activity Panel functionality
+        document.getElementById('closeActivity').addEventListener('click', () => {
+            playSound('click');
+            document.getElementById('activityPanel').classList.remove('show');
+            gameState.canMove = true;
+        });
+
+        document.querySelectorAll('.activity-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const activity = btn.dataset.activity;
+                playSound('click');
+                document.getElementById('activityPanel').classList.remove('show');
+                performActivity(activity);
+            });
+        });
+
+        function showActivityPanel() {
+            if (gameState.dialogueActive || gameState.isSleeping) return;
+            playSound('click');
+            document.getElementById('activityPanel').classList.add('show');
+            gameState.canMove = false;
+        }
+
+        function performActivity(activity) {
+            gameState.dailyActivitiesDone++;
+            
+            // Complete the do_activity quest on first activity
+            if (!quests.find(q => q.id === 'do_activity').completed) {
+                completeQuest('do_activity');
+            }
+            
+            switch(activity) {
+                case 'drawing':
+                    rpgStats.creativity += 10;
+                    addXP(20);
+                    showDialog("MmMMM flowers :D", 'her', false);
+                    setTimeout(hideDialog, 2500);
+                    break;
+                case 'watch a documentary':
+                    rpgStats.intelligence += 10;
+                    addXP(20);
+                    showDialog("WANNA HEAR SOMETHING I LEARNED?", 'her', false);
+                    setTimeout(hideDialog, 2500);
+                    break;
+                case 'workout':
+                    rpgStats.energy += 10;
+                    addXP(20);
+                    showDialog("Well. Done with that I guess?", 'her', false);
+                    setTimeout(hideDialog, 2500);
+                    break;
+                case 'movie':
+                    watchMovieSequence();
+                    break;
+                case 'valorant':
+                    playValorantSequence();
+                    break;
+                case 'minecraft':
+                    playMinecraftSequence();
+                    break;
+                case 'talk':
+                    deepTalkSequence();
+                    break;
+            }
+            
+            updateStatsUI();
+        }
+
+        function playValorantSequence() {
+            showDialog("Pls don't rage quit", 'him', false);
+            setTimeout(() => {
+                hideDialog();
+                setTimeout(() => {
+                    showDialogueChoices('valorant', [
+                        { 
+                            text: 'Play Penix', 
+                            class: 'flirty',
+                            response: "IM GONNA FLASH MY TEAM",
+                            callback: () => {
+                                showDialog("THATS MY GIRL", 'him', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    rpgStats.skills += 15;
+                                    addXP(25);
+                                    addLove(10);
+                                    updateStatsUI();
+                                    setTimeout(() => {
+                                        showDialog("Good job on your 9 kills in swift ma'am", 'him', false);
+                                        setTimeout(hideDialog, 2500);
+                                    }, 1000);
+                                }, 2500);
+                            }
+                        },
+                        { 
+                            text: 'Play Omen', 
+                            class: 'playful',
+                            response: "I WILL FLASH MY TEAM AGAIN",
+                            callback: () => {
+                                showDialog("Pls don't smoke that spot", 'him', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    rpgStats.skills += 10;
+                                    addXP(20);
+                                    addLove(15);
+                                    updateStatsUI();
+                                    setTimeout(() => {
+                                        showDialog("... I hate this game", 'him', false);
+                                        setTimeout(hideDialog, 2500);
+                                    }, 1000);
+                                }, 2500);
+                            }
+                        }
+                    ]);
+                }, 500);
+            }, 2500);
+        }
+
+        function playMinecraftSequence() {
+            showDialog("What chicken are you killin' this time?", 'him', false);
+            setTimeout(() => {
+                hideDialog();
+                setTimeout(() => {
+                    showDialogueChoices('minecraft', [
+                        { 
+                            text: 'Chicken 1', 
+                            class: 'flirty',
+                            response: "YOU NAMED IT?",
+                            callback: () => {
+                                showDialog("Wow...", 'him', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    rpgStats.creativity += 20;
+                                    addXP(25);
+                                    addLove(15);
+                                    updateStatsUI();
+                                    setTimeout(() => {
+                                        showDialog("STOP DYING", 'him', false);
+                                        setTimeout(hideDialog, 2500);
+                                    }, 1000);
+                                }, 2500);
+                            }
+                        },
+                        { 
+                            text: 'Go slave in the mines', 
+                            class: 'playful',
+                            response: "Pls i need a diamond hat",
+                            callback: () => {
+                                showDialog("uh oh, why dia hat?", 'him', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    rpgStats.skills += 10;
+                                    rpgStats.creativity += 10;
+                                    addXP(20);
+                                    addLove(10);
+                                    updateStatsUI();
+                                    setTimeout(() => {
+                                        showDialog("... that creeper was infront of you...", 'him', false);
+                                        setTimeout(hideDialog, 2500);
+                                    }, 1000);
+                                }, 2500);
+                            }
+                        }
+                    ]);
+                }, 500);
+            }, 2500);
+        }
+
+        function deepTalkSequence() {
+            const talkTopics = [
+                {
+                    question: "What's on your mind baby'",
+                    options: [
+                        {
+                            text: "EVIL DOLPHINS",
+                            response: "I think they're like the trumps of the sea lowk",
+                            reply: "Uh-huh"
+                        },
+                        {
+                            text: "Wanna hear about Russia and why it's such a great place but shitty gov?👩‍👧",
+                            response: "{insert diana responses}",
+                            reply: "We could watch a documentary about it with animations?"
+                        },
+                        {
+                            text: "I think I can outrun the pope if there was a zombie apocalypse",
+                            response: "No I'm deadass, I can outrun that hoe",
+                            reply: "Uh... You're blind???"
+                        }
+                    ]
+                },
+                {
+                    question: "Yk what's on my mind baby?",
+                    options: [
+                        {
+                            text: "MALE HORSIE :)",
+                            response: "My little horsie",
+                            reply: "STOP ASSAULTING MY PIXEL INTERNALS LIKE THAT"
+                        },
+                        {
+                            text: "I think I can outrun you",
+                            response: "You have asthma, soooo",
+                            reply: "Asthmophobic bitch"
+                        },
+                        {
+                            text: "Pelmeni",
+                            response: "I'm hungry :(",
+                            reply: "I'll cook for you"
+                        }
+                    ]
+                }
+            ];
+            
+            const topic = talkTopics[Math.floor(Math.random() * talkTopics.length)];
+            
+            showDialog(topic.question, 'him', false);
+            setTimeout(() => {
+                hideDialog();
+                setTimeout(() => {
+                    showDialogueChoices('deep_talk', topic.options.map(opt => ({
+                        text: opt.text,
+                        class: 'flirty',
+                        response: opt.response,
+                        callback: () => {
+                            showDialog(opt.reply, 'him', false);
+                            setTimeout(() => {
+                                hideDialog();
+                                addLove(20);
+                                addXP(30);
+                                updateStatsUI();
+                            }, 3000);
+                        }
+                    })));
+                }, 500);
+            }, 2500);
+        }
+
+        function watchMovieSequence() {
+            // Movie selection dialogue
+            showDialog("Want to watch a movie with me, baby?", 'him', false);
+            setTimeout(() => {
+                hideDialog();
+                setTimeout(() => {
+                    showDialogueChoices('movie_choice', [
+                        { 
+                            text: 'Horror Movie 👻', 
+                            class: 'playful',
+                            response: "I miiiight punch you",
+                            callback: () => {
+                                playMovieScene('horror');
+                            }
+                        },
+                        { 
+                            text: 'Romance Movie 💕', 
+                            class: 'flirty',
+                            response: "You do lowkey remind me of the male lead baby",
+                            callback: () => {
+                                playMovieScene('romance');
+                            }
+                        },
+                        { 
+                            text: 'Comedy Movie 😂', 
+                            class: 'playful',
+                            response: "I wanna hate on others stupidity please",
+                            callback: () => {
+                                playMovieScene('comedy');
+                            }
+                        },
+                        { 
+                            text: 'Action Movie 💥', 
+                            class: 'playful',
+                            response: "I think I could outrun a bomb",
+                            callback: () => {
+                                playMovieScene('action');
+                            }
+                        },
+                        { 
+                            text: 'Anime 🎌', 
+                            class: 'flirty',
+                            response: "I DON'T REMEMBER THE NAME BUT IT HAD GOOD PLOT",
+                            callback: () => {
+                                playMovieScene('anime');
+                            }
+                        },
+                        { 
+                            text: 'Sci-Fi 🚀', 
+                            class: 'playful',
+                            response: "Can we watch something realistic though?",
+                            callback: () => {
+                                playMovieScene('scifi');
+                            }
+                        }
+                    ]);
+                }, 500);
+            }, 2500);
+        }
+
+        function playMovieScene(movieType) {
+            const cinematicFade = document.getElementById('cinematicFade');
+            
+            // Complete watch_movie quest
+            if (!quests.find(q => q.id === 'watch_movie').completed) {
+                completeQuest('watch_movie');
+            }
+            
+            // Fade to black
+            cinematicFade.classList.remove('fade-out');
+            cinematicFade.classList.add('fade-in');
+            
+            setTimeout(() => {
+                // Movie is "playing" (black screen)
+                const movieDialogues = {
+                    horror: {
+                        him: "Wanna cuddle?",
+                        her: "I need to piss"
+                    },
+                    romance: {
+                        him: "That was sum",
+                        her: "Do you hate me?"
+                    },
+                    comedy: {
+                        him: "Clown ahh",
+                        her: "bro you literally act the saame way as the clown"
+                    },
+                    action: {
+                        him: "Yeah you def are not outrunning that bomb",
+                        her: "..."
+                    },
+                    anime: {
+                        him: "I wanna eat that food",
+                        her: "Fat bastard"
+                    },
+                    scifi: {
+                        him: "I don't think I like insterstellar?",
+                        her: "I need to piss... again..."
+                    }
+                };
+                
+                const dialogue = movieDialogues[movieType];
+                
+                // Fade back in after "movie"
+                setTimeout(() => {
+                    cinematicFade.classList.remove('fade-in');
+                    cinematicFade.classList.add('fade-out');
+                    
+                    setTimeout(() => {
+                        // Post-movie commentary
+                        showDialog(dialogue.him, 'him', false);
+                        setTimeout(() => {
+                            hideDialog();
+                            setTimeout(() => {
+                                showDialog(dialogue.her, 'her', false);
+                                setTimeout(() => {
+                                    hideDialog();
+                                    gameState.watchedMovie = true;
+                                    addLove(15);
+                                    addXP(25);
+                                    updateStatsUI();
+                                }, 2500);
+                            }, 500);
+                        }, 2500);
+                    }, 1000);
+                }, 3000); // Movie duration
+            }, 2000);
+        }
 
         // Theme Button Handlers
         document.querySelectorAll('.theme-btn').forEach(btn => {
@@ -1640,6 +2262,10 @@
             maxXp: 100,
             love: 0,
             maxLove: 100,
+            creativity: 0,
+            intelligence: 0,
+            energy: 0,
+            skills: 0,
             achievements: [],
             inventory: []
         };
@@ -1669,7 +2295,10 @@
             isNearBed: false,
             isSleeping: false,
             allQuestsComplete: false,
-            himPosition: { x: 464, y: 240 }
+            himPosition: { x: 464, y: 240 },
+            dialogueActive: false,
+            watchedMovie: false,
+            dailyActivitiesDone: 0
         };
 
         const quests = [
@@ -1680,6 +2309,9 @@
             { id: 'cake', name: 'Find the Cake 🍰', completed: false, xp: 15 },
             { id: 'wine', name: 'Find the Wine 🍷', completed: false, xp: 15 },
             { id: 'letter', name: 'Read the Letter 💌', completed: false, xp: 20 },
+            { id: 'talk_to_him', name: 'Have a conversation with Amon 💬', completed: false, xp: 10 },
+            { id: 'do_activity', name: 'Complete a daily activity 🎨', completed: false, xp: 15 },
+            { id: 'watch_movie', name: 'Watch a movie together 🎬', completed: false, xp: 25 },
             { id: 'kiss', name: 'Kiss Him 💋', completed: false, xp: 30 },
             { id: 'sleep', name: 'Sleep Together 😴', completed: false, xp: 50 }
         ];
@@ -1719,6 +2351,51 @@
             letter: '💌'
         };
 
+        const itemInfo = {
+            teddybear: {
+                name: 'Teddy Bear',
+                description: 'Me, this is me baby.',
+                giver: 'From: Amon 💕',
+                message: "I will always cherish the kid in you that never got to be loved properly"
+            },
+            flower: {
+                name: 'Beautiful Flower',
+                description: 'Pls dont eat it',
+                giver: 'From: Amon 💕',
+                message: "I will always make sure you bloom pretty like your mother intended you to"
+            },
+            giftbox: {
+                name: 'Gift Box',
+                description: 'It has me inside it',
+                giver: 'From: Amon 💕',
+                message: "Consider this as me making it up for your birthday princess"
+            },
+            steak: {
+                name: 'Delicious Steak',
+                description: 'Always for your cravings',
+                giver: 'From: Amon 💕',
+                message: "Can't forget your cravings baby :D"
+            },
+            cake: {
+                name: 'Sweet Cake',
+                description: 'Strawberry charlotte, trust.',
+                giver: 'From: Amon 💕',
+                message: "To growing old with you, best blessing I've gotten"
+            },
+            wine: {
+                name: 'Fine Wine',
+                description: 'Its lambrusco',
+                giver: 'From: Amon 💕',
+                message: "To enjoying you timely, I'll be always here"
+            },
+            letter: {
+                name: 'Love Letter',
+                description: 'A heartfelt letter expressing deep feelings.',
+                giver: 'From: Amon 💕',
+                message: "And at last, in so many different words, I'll choose a simplified version, I love you to the moon and back my pretty girl."
+            }
+        };
+
         // Initialize with cinematic fade-in
         window.addEventListener('load', () => {
             // Cinematic fade out from black
@@ -1756,6 +2433,10 @@
                                     showDialog("You're gonna stain my pixel bed with glitter too???", 'him', false);
                                     setTimeout(() => {
                                         hideDialog();
+                                        completeQuest('talk_to_him');
+                                        setTimeout(() => {
+                                            showTutorialHint();
+                                        }, 1000);
                                         startIdleTimer();
                                     }, 2500);
                                 }
@@ -1765,9 +2446,13 @@
                                 class: 'sarcastic',
                                 response: "You coded it well enough for me to load so fast :)",
                                 callback: () => {
-                                    showDialog("Yes ma'am", 'him', false);
+                                    showDialog("Yeah ma'am", 'him', false);
                                     setTimeout(() => {
                                         hideDialog();
+                                        completeQuest('talk_to_him');
+                                        setTimeout(() => {
+                                            showTutorialHint();
+                                        }, 1000);
                                         startIdleTimer();
                                     }, 2500);
                                 }
@@ -1780,6 +2465,10 @@
                                     showDialog("You're so cute", 'him', false);
                                     setTimeout(() => {
                                         hideDialog();
+                                        completeQuest('talk_to_him');
+                                        setTimeout(() => {
+                                            showTutorialHint();
+                                        }, 1000);
                                         startIdleTimer();
                                     }, 2500);
                                 }
@@ -1790,13 +2479,18 @@
             }, 2000);
         }
 
+        function showTutorialHint() {
+            showDialog("Alright, explore the room and find all the items I left for you. Use WASD to move around, and click the PC desk (or press E) if you want to do activities together! 💕", 'him', false);
+            setTimeout(hideDialog, 4000);
+        }
+
         function updateStatsUI() {
             document.getElementById('playerLevel').textContent = rpgStats.level;
             document.getElementById('currentXP').textContent = rpgStats.xp;
             document.getElementById('maxXP').textContent = rpgStats.maxXp;
             document.getElementById('loveBar').style.width = (rpgStats.love / rpgStats.maxLove * 100) + '%';
             document.getElementById('itemsFound').textContent = gameState.itemsCollected.length + ' / 7';
-            document.getElementById('achievementCount').textContent = rpgStats.achievements.length + ' / ' + achievements.length;
+            document.getElementById('creativityStat').textContent = rpgStats.creativity;
         }
 
         function addXP(amount) {
@@ -1881,8 +2575,31 @@
                 slot.textContent = itemIcons[itemId];
                 slot.classList.add('filled');
                 slot.title = itemId.charAt(0).toUpperCase() + itemId.slice(1);
+                slot.dataset.itemId = itemId;
+                
+                // Add click handler to show item info
+                slot.addEventListener('click', () => {
+                    showItemInfo(itemId);
+                });
             }
         }
+
+        function showItemInfo(itemId) {
+            const info = itemInfo[itemId];
+            if (!info) return;
+            
+            playSound('click');
+            document.getElementById('itemInfoTitle').textContent = info.name;
+            document.getElementById('itemInfoIcon').textContent = itemIcons[itemId];
+            document.getElementById('itemInfoText').textContent = info.description;
+            document.getElementById('itemInfoGiver').textContent = info.giver;
+            document.getElementById('itemInfoPanel').classList.add('show');
+        }
+
+        document.getElementById('closeItemInfo').addEventListener('click', () => {
+            playSound('click');
+            document.getElementById('itemInfoPanel').classList.remove('show');
+        });
 
         function updatePlayerNames() {
             const herName = document.getElementById('herName');
@@ -1946,6 +2663,7 @@
             }
             
             gameState.canMove = false;
+            gameState.dialogueActive = true;
         }
 
         function hideDialog() {
@@ -1957,6 +2675,7 @@
             avatarImg.classList.remove('talking');
             continueBtn.classList.remove('show');
             gameState.canMove = true;
+            gameState.dialogueActive = false;
         }
 
         document.getElementById('continueBtn').addEventListener('click', () => {
@@ -2166,6 +2885,9 @@
 
         ['teddybear', 'flower', 'giftbox', 'steak', 'cake', 'wine', 'letter'].forEach(itemId => {
             document.getElementById(itemId).addEventListener('click', () => {
+                // Prevent clicking items during dialogue
+                if (gameState.dialogueActive) return;
+                
                 playSound('collect');
                 collectItem(itemId);
             });
@@ -2217,13 +2939,21 @@
                 addLove(25);
                 
                 setTimeout(() => {
-                    const letter = document.getElementById('letter');
-                    letter.style.display = 'block';
-                    for (let i = 0; i < 6; i++) {
+                    // Add a special dialogue when all items are collected
+                    hideDialog();
+                    setTimeout(() => {
+                        showDialog("You found everything! Now check the center of the room for one last thing... 💌", 'him', false);
                         setTimeout(() => {
-                            createEffect('sparkle', letter.offsetLeft + 24, letter.offsetTop + 24);
-                        }, i * 180);
-                    }
+                            hideDialog();
+                            const letter = document.getElementById('letter');
+                            letter.style.display = 'block';
+                            for (let i = 0; i < 6; i++) {
+                                setTimeout(() => {
+                                    createEffect('sparkle', letter.offsetLeft + 24, letter.offsetTop + 24);
+                                }, i * 180);
+                            }
+                        }, 2500);
+                    }, 1000);
                 }, 1200);
             }
         }
@@ -2233,18 +2963,49 @@
             playSound('click');
             
             if (!gameState.isNearHim) {
-                showDialog("Finish your tasks and then come close to me, dummy!!! 💕", 'him', false);
+                const randomMessages = [
+                    "Come here princess :)",
+                    "YOU ARE TOO FAR!",
+                    "I'm waiting for you to come to me :)"
+                ];
+                const randomMsg = randomMessages[Math.floor(Math.random() * randomMessages.length)];
+                showDialog(randomMsg, 'him', false);
                 setTimeout(hideDialog, 2500);
                 return;
             }
             
             if (!gameState.allItemsCollected || !gameState.itemsCollected.includes('letter')) {
-                showDialog("Find all the items and read the letter first, my love! 💕", 'him', false);
+                const encouragementMessages = [
+                    "Find all the items dumdum",
+                    "Did you find the items blind bat?",
+                    "There's still more to discover in our room I promise",
+                    "Find all my gifts first, then we can smooch"
+                ];
+                const randomMsg = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
+                showDialog(randomMsg, 'him', false);
                 setTimeout(hideDialog, 2500);
                 return;
             }
             
-            if (gameState.kissAnimating || quests.find(q => q.id === 'kiss').completed) return;
+            // Allow kissing multiple times, but only animate if not currently animating
+            if (gameState.kissAnimating) return;
+            
+            // If already kissed before, show different dialogues
+            if (quests.find(q => q.id === 'kiss').completed) {
+                const repeatKissDialogues = [
+                    "Again? Cute",
+                    "Can't get enough of me, hehe?",
+                    "MORE!",
+                    "All yours princess"
+                ];
+                const randomMsg = repeatKissDialogues[Math.floor(Math.random() * repeatKissDialogues.length)];
+                showDialog(randomMsg, 'him', false);
+                setTimeout(() => {
+                    hideDialog();
+                    playKissAnimation(true); // Pass true to skip quest completion
+                }, 2500);
+                return;
+            }
             
             // Start kiss dialogue sequence
             showDialog("Touch me", 'him', false);
@@ -2330,7 +3091,7 @@
             }, 2500);
         }
 
-        function playKissAnimation() {
+        function playKissAnimation(skipQuestCompletion = false) {
             gameState.kissAnimating = true;
             gameState.canMove = false;
             kissRefusalCount = 0;
@@ -2374,24 +3135,32 @@
                         himSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/idle1.png';
                         herSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/smile_front.png';
                         
-                        showDialog("Thank you for everything, my beautiful girl. I love you so much! Now we can rest together... 💕💕💕", 'him', false);
-                        completeQuest('kiss');
-                        
-                        const quest = quests.find(q => q.id === 'kiss');
-                        if (quest) {
-                            addXP(quest.xp);
-                            addLove(30);
+                        // Only complete quest and show full message on first kiss
+                        if (!skipQuestCompletion) {
+                            showDialog("Thank you for everything, my beautiful girl. I love you so much! Now we can rest together... 💕💕💕", 'him', false);
+                            completeQuest('kiss');
+                            
+                            const quest = quests.find(q => q.id === 'kiss');
+                            if (quest) {
+                                addXP(quest.xp);
+                                addLove(30);
+                            }
+                            unlockAchievement('first_kiss');
+                            
+                            checkAllQuestsComplete();
+                        } else {
+                            // For repeat kisses, just add some love
+                            addLove(5);
                         }
-                        unlockAchievement('first_kiss');
-                        
-                        checkAllQuestsComplete();
                         
                         setTimeout(() => {
-                            hideDialog();
+                            if (!skipQuestCompletion) {
+                                hideDialog();
+                            }
                             gameState.kissAnimating = false;
                             gameState.canMove = true;
                             startHimIdleAnimation();
-                        }, 3500);
+                        }, skipQuestCompletion ? 500 : 3500);
                     }, 1200);
                 }
             }, 750);
@@ -2423,7 +3192,12 @@
                 return;
             }
             
-            if (gameState.isSleeping) return;
+            // Allow multiple sleep sessions
+            if (gameState.isSleeping) {
+                showDialog("Already cozy in bed... want to get up? 😴", 'him', false);
+                setTimeout(hideDialog, 2500);
+                return;
+            }
             
             // Start sleep dialogue sequence with choice
             showDialog("Les eep princess", 'him', false);
@@ -2539,31 +3313,41 @@
             herName.style.opacity = '0';
             himName.style.opacity = '0';
             
-            her.style.transition = 'all 1.5s ease';
-            him.style.transition = 'all 1.5s ease';
-            her.style.zIndex = '15';
-            him.style.zIndex = '15';
-            
-            her.style.left = '95px';
-            her.style.bottom = '130px';
-            him.style.left = '50px';
-            him.style.bottom = '130px';
+            // Fade to black before moving characters
+            cinematicFade.classList.remove('fade-out');
+            cinematicFade.classList.add('fade-in');
             
             setTimeout(() => {
-                herSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/layonbed.png';
-                himSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/laying.png';
+                // Move characters while screen is black
+                her.style.transition = 'all 1.5s ease';
+                him.style.transition = 'all 1.5s ease';
+                her.style.zIndex = '15';
+                him.style.zIndex = '15';
                 
-                herSprite.style.width = '90px';
-                herSprite.style.height = '210px';
-                her.style.width = '90px';
-                her.style.height = '210px';
+                her.style.left = '95px';
+                her.style.bottom = '130px';
+                him.style.left = '50px';
+                him.style.bottom = '130px';
                 
-                himSprite.style.width = '90px';
-                himSprite.style.height = '210px';
-                him.style.width = '90px';
-                him.style.height = '210px';
-                
-            }, 1500);
+                setTimeout(() => {
+                    herSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/layonbed.png';
+                    himSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/laying.png';
+                    
+                    herSprite.style.width = '90px';
+                    herSprite.style.height = '210px';
+                    her.style.width = '90px';
+                    her.style.height = '210px';
+                    
+                    himSprite.style.width = '90px';
+                    himSprite.style.height = '210px';
+                    him.style.width = '90px';
+                    him.style.height = '210px';
+                    
+                    // Fade back in to show them in bed
+                    cinematicFade.classList.remove('fade-in');
+                    cinematicFade.classList.add('fade-out');
+                }, 1500);
+            }, 2000);
             
             setTimeout(() => {
                 sleepOverlay.classList.add('active');
@@ -2599,7 +3383,7 @@
                     }, 5000);
                     
                 }, 2000);
-            }, 2000);
+            }, 4000);
         }
 
         function createSleepParticles() {
@@ -2658,6 +3442,30 @@
                 </div>`
             ).join('');
         }
+
+        // End game button handlers
+        document.getElementById('playAgainBtn').addEventListener('click', () => {
+            playSound('click');
+            location.reload();
+        });
+
+        document.getElementById('stayBtn').addEventListener('click', () => {
+            playSound('click');
+            // Just close the end game screen to let them stay in the scene
+            document.getElementById('endGameScreen').classList.remove('show');
+        });
+
+        // PC Table click handler for activity panel
+        document.getElementById('pcTable').addEventListener('click', () => {
+            showActivityPanel();
+        });
+
+        // Add keyboard shortcut to open activity panel (press 'E' key)
+        window.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'e' && !gameState.dialogueActive && !gameState.isSleeping) {
+                showActivityPanel();
+            }
+        });
     </script>
 </body>
 </html>
