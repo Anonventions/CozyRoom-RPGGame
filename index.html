@@ -3039,6 +3039,12 @@
         const keys = {};
         let stepCount = 0;
 
+        // Touch Controls Variables
+        let touchJoystickActive = false;
+        let joystickCenterX = 0;
+        let joystickCenterY = 0;
+        let touchMoveVector = { x: 0, y: 0 };
+
         window.addEventListener('keydown', (e) => {
             keys[e.key.toLowerCase()] = true;
             if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(e.key.toLowerCase())) {
@@ -3138,11 +3144,6 @@
         updateMovement();
 
         // Touch Controls for Mobile
-        let touchJoystickActive = false;
-        let joystickCenterX = 0;
-        let joystickCenterY = 0;
-        let touchMoveVector = { x: 0, y: 0 };
-
         function initTouchControls() {
             const joystick = document.getElementById('joystick');
             const joystickButton = document.getElementById('joystickButton');
