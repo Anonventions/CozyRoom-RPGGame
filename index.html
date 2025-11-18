@@ -71,13 +71,21 @@
         #endGameScreen h2 {
             font-size: 48px;
             color: white;
-            text-shadow: 0 0 30px rgba(255,182,193,1);
+            text-shadow: 0 0 30px rgba(248,187,208,1);
             animation: gentlePulse 3s ease-in-out infinite;
         }
 
         @keyframes gentlePulse {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+            0%, 100% { 
+                opacity: 0.8; 
+                transform: scale(1);
+                text-shadow: 0 0 30px rgba(248,187,208,1);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.05);
+                text-shadow: 0 0 40px rgba(248,187,208,1), 0 0 60px rgba(244,143,177,0.8);
+            }
         }
 
         .end-game-buttons {
@@ -97,16 +105,16 @@
         }
 
         .end-game-btn.play-again {
-            background: linear-gradient(135deg, rgba(255,105,180,0.95), rgba(255,20,147,0.95));
+            background: linear-gradient(135deg, rgba(248,187,208,0.95), rgba(244,143,177,0.95));
         }
 
         .end-game-btn.stay {
-            background: linear-gradient(135deg, rgba(138,43,226,0.95), rgba(75,0,130,0.95));
+            background: linear-gradient(135deg, rgba(198,160,246,0.95), rgba(157,129,204,0.95));
         }
 
         .end-game-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 10px 40px rgba(255,182,193,0.6);
+            box-shadow: 0 10px 40px rgba(248,187,208,0.5);
         }
 
         /* Settings Button */
@@ -116,8 +124,8 @@
             left: 25px;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, rgba(138,43,226,0.95), rgba(75,0,130,0.95));
-            border: 3px solid rgba(186,85,211,0.6);
+            background: linear-gradient(135deg, rgba(198,160,246,0.95), rgba(157,129,204,0.95));
+            border: 3px solid rgba(210,180,230,0.6);
             border-radius: 50%;
             cursor: pointer;
             z-index: 1000;
@@ -126,12 +134,12 @@
             justify-content: center;
             font-size: 30px;
             transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(138,43,226,0.5);
+            box-shadow: 0 5px 20px rgba(198,160,246,0.4);
         }
 
         #settingsBtn:hover {
             transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 8px 30px rgba(138,43,226,0.8);
+            box-shadow: 0 8px 30px rgba(198,160,246,0.6);
         }
 
         /* Settings Panel */
@@ -141,12 +149,12 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 500px;
-            background: linear-gradient(135deg, rgba(138,43,226,0.98), rgba(75,0,130,0.98));
+            background: linear-gradient(135deg, rgba(198,160,246,0.98), rgba(157,129,204,0.98));
             padding: 30px;
             border-radius: 20px;
             z-index: 2000;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 3px solid rgba(186,85,211,0.8);
+            border: 3px solid rgba(210,180,230,0.8);
             transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
@@ -196,7 +204,7 @@
         }
 
         .toggle-switch.active {
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            background: linear-gradient(135deg, #F8BBD0, #F48FB1);
         }
 
         .toggle-slider {
@@ -243,16 +251,16 @@
         }
 
         .theme-btn.active {
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
-            border-color: #ffd700;
-            box-shadow: 0 0 20px rgba(255,105,180,0.8);
+            background: linear-gradient(135deg, #F8BBD0, #F48FB1);
+            border-color: #FFE082;
+            box-shadow: 0 0 20px rgba(248,187,208,0.6);
         }
 
         #closeSettings {
             width: 100%;
             padding: 12px;
             margin-top: 20px;
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            background: linear-gradient(135deg, #F8BBD0, #F48FB1);
             border: none;
             border-radius: 15px;
             color: white;
@@ -263,7 +271,7 @@
         }
 
         #closeSettings:hover {
-            background: linear-gradient(135deg, #ff1493, #c71585);
+            background: linear-gradient(135deg, #F48FB1, #EC407A);
             transform: scale(1.05);
         }
 
@@ -288,8 +296,8 @@
 
         .choice-btn {
             padding: 15px 25px 15px 70px;
-            background: linear-gradient(135deg, rgba(255,105,180,0.95), rgba(255,20,147,0.95));
-            border: 3px solid rgba(255,182,193,0.8);
+            background: linear-gradient(135deg, rgba(248,187,208,0.95), rgba(244,143,177,0.95));
+            border: 3px solid rgba(255,224,230,0.8);
             border-radius: 20px;
             color: white;
             font-family: 'Quaver', Arial;
@@ -298,7 +306,7 @@
             transition: all 0.3s;
             text-align: left;
             position: relative;
-            box-shadow: 0 5px 15px rgba(255,105,180,0.5);
+            box-shadow: 0 5px 15px rgba(248,187,208,0.4);
         }
 
         .choice-btn::before {
@@ -316,21 +324,21 @@
         }
 
         .choice-btn:hover {
-            background: linear-gradient(135deg, #ff1493, #c71585);
+            background: linear-gradient(135deg, #F48FB1, #EC407A);
             transform: translateX(10px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(255,105,180,0.8);
+            box-shadow: 0 8px 25px rgba(248,187,208,0.6);
         }
 
         .choice-btn.playful {
-            border-color: #FFD700;
+            border-color: #FFE082;
         }
 
         .choice-btn.sarcastic {
-            border-color: #9370DB;
+            border-color: #CE93D8;
         }
 
         .choice-btn.flirty {
-            border-color: #FF69B4;
+            border-color: #F8BBD0;
         }
 
         /* Weather Effects */
@@ -425,7 +433,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background: linear-gradient(135deg, #B39DDB 0%, #9FA8DA 25%, #F8BBD0 50%, #B2DFDB 75%, #C5E1A5 100%);
             background-size: 400% 400%;
             animation: gradientFlow 15s ease infinite;
             display: flex;
@@ -476,8 +484,8 @@
             font-size: 72px;
             color: white;
             text-shadow: 0 0 20px rgba(255,255,255,0.8),
-                         0 0 40px rgba(255,105,180,0.6),
-                         0 0 60px rgba(255,20,147,0.4);
+                         0 0 40px rgba(248,187,208,0.6),
+                         0 0 60px rgba(244,143,177,0.4);
             margin-bottom: 40px;
             animation: titlePulse 2s ease-in-out infinite;
             z-index: 10;
@@ -487,14 +495,14 @@
             0%, 100% {
                 transform: scale(1);
                 text-shadow: 0 0 20px rgba(255,255,255,0.8),
-                             0 0 40px rgba(255,105,180,0.6),
-                             0 0 60px rgba(255,20,147,0.4);
+                             0 0 40px rgba(248,187,208,0.6),
+                             0 0 60px rgba(244,143,177,0.4);
             }
             50% {
                 transform: scale(1.05);
                 text-shadow: 0 0 30px rgba(255,255,255,1),
-                             0 0 60px rgba(255,105,180,0.8),
-                             0 0 90px rgba(255,20,147,0.6);
+                             0 0 60px rgba(248,187,208,0.8),
+                             0 0 90px rgba(244,143,177,0.6);
             }
         }
 
@@ -565,6 +573,18 @@
             z-index: 500;
             display: flex;
             flex-direction: column;
+            animation: fadeInSlide 0.8s ease-out;
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         #statsPanel h3 {
@@ -587,8 +607,8 @@
         }
 
         .stat-value {
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+            color: #FFE082;
+            text-shadow: 0 0 10px rgba(255,224,130,0.5);
         }
 
         .progress-bar {
@@ -603,9 +623,9 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ff69b4, #ff1493);
+            background: linear-gradient(90deg, #F8BBD0, #F48FB1);
             transition: width 0.5s ease;
-            box-shadow: 0 0 10px rgba(255,105,180,0.8);
+            box-shadow: 0 0 10px rgba(248,187,208,0.6);
         }
 
         /* Inventory System */
@@ -623,6 +643,7 @@
             z-index: 500;
             display: flex;
             flex-direction: column;
+            animation: fadeInSlide 0.8s ease-out 0.2s backwards;
         }
 
         #inventory h4 {
@@ -655,12 +676,12 @@
         .inventory-slot:hover {
             background: rgba(255,255,255,0.2);
             transform: scale(1.1);
-            border-color: #ffd700;
+            border-color: #FFE082;
         }
 
         .inventory-slot.filled {
-            background: rgba(255,215,0,0.2);
-            border-color: #ffd700;
+            background: rgba(255,224,130,0.2);
+            border-color: #FFE082;
             animation: pulse 2s infinite;
         }
 
@@ -675,12 +696,12 @@
             top: -200px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, rgba(255,215,0,0.95), rgba(255,165,0,0.95));
+            background: linear-gradient(135deg, rgba(255,224,130,0.95), rgba(255,213,79,0.95));
             padding: 20px 30px;
             border-radius: 15px;
             z-index: 1500;
-            box-shadow: 0 10px 40px rgba(255,215,0,0.6);
-            border: 3px solid #ffd700;
+            box-shadow: 0 10px 40px rgba(255,224,130,0.5);
+            border: 3px solid #FFE082;
             transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             min-width: 350px;
             text-align: center;
@@ -779,8 +800,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 72px;
-            color: #ffd700;
-            text-shadow: 0 0 30px rgba(255,215,0,1);
+            color: #FFE082;
+            text-shadow: 0 0 30px rgba(255,224,130,1);
             z-index: 2000;
             pointer-events: none;
             animation: levelUpAnim 2s ease-out forwards;
@@ -909,7 +930,7 @@
         }
 
         #bed.interactive:hover {
-            filter: brightness(1.2) drop-shadow(0 0 15px rgba(255,182,193,0.8));
+            filter: brightness(1.2) drop-shadow(0 0 15px rgba(248,187,208,0.8));
         }
 
         #pcTable {
@@ -923,7 +944,7 @@
         }
 
         #pcTable:hover {
-            filter: brightness(1.2) drop-shadow(0 0 15px rgba(138,43,226,0.8));
+            filter: brightness(1.2) drop-shadow(0 0 15px rgba(198,160,246,0.8));
         }
 
         #gamingChair {
@@ -949,11 +970,22 @@
             z-index: 85;
             width: 48px;
             height: 48px;
+            animation: itemGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes itemGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 5px rgba(255,224,130,0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 15px rgba(255,224,130,0.9));
+            }
         }
 
         .item:hover {
             transform: translateY(-4px) scale(1.1);
-            filter: drop-shadow(0 8px 16px rgba(255,215,0,1)) brightness(1.3);
+            filter: drop-shadow(0 8px 16px rgba(255,224,130,1)) brightness(1.3);
+            animation: none;
         }
 
         .item.collected {
@@ -1008,7 +1040,7 @@
         }
 
         #him:hover {
-            filter: brightness(1.25) drop-shadow(0 0 12px rgba(255,105,180,0.9));
+            filter: brightness(1.25) drop-shadow(0 0 12px rgba(248,187,208,0.9));
         }
 
         #bedHint {
@@ -1016,7 +1048,7 @@
             bottom: -35px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, rgba(138,43,226,0.95), rgba(75,0,130,0.95));
+            background: linear-gradient(135deg, rgba(198,160,246,0.95), rgba(157,129,204,0.95));
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
@@ -1025,7 +1057,7 @@
             pointer-events: none;
             transition: opacity 0.3s;
             white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(138,43,226,0.6);
+            box-shadow: 0 4px 12px rgba(198,160,246,0.5);
             animation: bounce-hint 1s infinite;
             z-index: 100;
         }
@@ -1039,7 +1071,7 @@
             bottom: -40px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, rgba(255,105,180,0.95), rgba(255,20,147,0.95));
+            background: linear-gradient(135deg, rgba(248,187,208,0.95), rgba(244,143,177,0.95));
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
@@ -1048,7 +1080,7 @@
             pointer-events: none;
             transition: opacity 0.3s;
             white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(255,105,180,0.6);
+            box-shadow: 0 4px 12px rgba(248,187,208,0.5);
             animation: bounce-hint 1s infinite;
         }
 
@@ -1209,13 +1241,14 @@
             z-index: 500;
             max-height: 400px;
             overflow-y: auto;
+            animation: fadeInSlide 0.8s ease-out 0.1s backwards;
         }
 
         #questIndicator h3 {
             margin-bottom: 14px;
-            color: #ff1493;
+            color: #F48FB1;
             font-size: 24px;
-            text-shadow: 0 2px 4px rgba(255,105,180,0.3);
+            text-shadow: 0 2px 4px rgba(248,187,208,0.3);
         }
 
         .quest-item {
@@ -1308,12 +1341,12 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 600px;
-            background: linear-gradient(135deg, rgba(255,105,180,0.98), rgba(255,20,147,0.98));
+            background: linear-gradient(135deg, rgba(248,187,208,0.98), rgba(244,143,177,0.98));
             padding: 30px;
             border-radius: 20px;
             z-index: 2000;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 3px solid rgba(255,182,193,0.8);
+            border: 3px solid rgba(255,224,230,0.8);
             transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
@@ -1352,7 +1385,7 @@
         .activity-btn:hover {
             background: rgba(255,255,255,0.3);
             transform: scale(1.05);
-            border-color: #ffd700;
+            border-color: #FFE082;
         }
 
         .activity-btn .activity-icon {
@@ -1368,12 +1401,12 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 500px;
-            background: linear-gradient(135deg, rgba(138,43,226,0.98), rgba(75,0,130,0.98));
+            background: linear-gradient(135deg, rgba(198,160,246,0.98), rgba(157,129,204,0.98));
             padding: 30px;
             border-radius: 20px;
             z-index: 2500;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 3px solid rgba(186,85,211,0.8);
+            border: 3px solid rgba(210,180,230,0.8);
             transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
@@ -1403,7 +1436,7 @@
         }
 
         #itemInfoGiver {
-            color: #ffd700;
+            color: #FFE082;
             font-size: 14px;
             text-align: center;
             margin-bottom: 20px;
@@ -1412,7 +1445,7 @@
         .close-info-btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            background: linear-gradient(135deg, #F8BBD0, #F48FB1);
             border: none;
             border-radius: 15px;
             color: white;
@@ -1423,7 +1456,7 @@
         }
 
         .close-info-btn:hover {
-            background: linear-gradient(135deg, #ff1493, #c71585);
+            background: linear-gradient(135deg, #F48FB1, #EC407A);
             transform: scale(1.05);
         }
     </style>
@@ -2098,6 +2131,10 @@
 
         function playMovieScene(movieType) {
             const cinematicFade = document.getElementById('cinematicFade');
+            const choicesContainer = document.getElementById('dialogueChoices');
+            
+            // Hide dialogue choices immediately
+            choicesContainer.classList.remove('show');
             
             // Complete watch_movie quest
             if (!quests.find(q => q.id === 'watch_movie').completed) {
@@ -2289,7 +2326,7 @@
             canMove: true,
             allItemsCollected: false,
             kissAnimating: false,
-            walkFrame: 0,
+            walkFrame: 1,
             frameCounter: 0,
             isNearHim: false,
             isNearBed: false,
@@ -2861,17 +2898,15 @@
                 gameState.herDirection = newDirection;
                 gameState.frameCounter++;
                 
-                if (gameState.frameCounter % 12 === 0) {
-                    gameState.walkFrame = (gameState.walkFrame + 1) % 3;
+                // Cycle between 1 and 2 for walk frames (walk1.png and walk2.png)
+                if (gameState.frameCounter % 10 === 0) {
+                    gameState.walkFrame = gameState.walkFrame === 1 ? 2 : 1;
                 }
                 
-                if (gameState.walkFrame === 0) {
-                    herSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/${newDirection}_stand.png`;
-                } else {
-                    herSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/${newDirection}_walk${gameState.walkFrame}.png`;
-                }
+                // Always use walk frames when moving
+                herSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/${newDirection}_walk${gameState.walkFrame}.png`;
             } else {
-                gameState.walkFrame = 0;
+                gameState.walkFrame = 1;
                 gameState.frameCounter = 0;
                 herSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/${gameState.herDirection}_stand.png`;
             }
@@ -3379,6 +3414,7 @@
                         setTimeout(() => {
                             endGameScreen.classList.add('show');
                             cinematicFade.style.opacity = '0.8'; // Semi-transparent for visibility
+                            cinematicFade.style.pointerEvents = 'none'; // Allow clicking buttons
                         }, 2000);
                     }, 5000);
                     
