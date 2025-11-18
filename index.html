@@ -902,6 +902,11 @@
             z-index: 10;
             cursor: pointer;
             transition: filter 0.3s;
+            pointer-events: auto;
+        }
+
+        #bed:hover {
+            filter: brightness(1.15);
         }
 
         #bed.interactive {
@@ -2195,6 +2200,11 @@
         function selectDialogueChoice(herResponse, callback) {
             const choicesContainer = document.getElementById('dialogueChoices');
             choicesContainer.classList.remove('show');
+            
+            // Clear the choices after hiding to prevent stuck UI
+            setTimeout(() => {
+                choicesContainer.innerHTML = '';
+            }, 500);
 
             // Show Her response
             showDialog(herResponse, 'her', false);
@@ -2670,10 +2680,18 @@
             const textbox = document.getElementById('textboxContainer');
             const avatarImg = document.getElementById('avatarImg');
             const continueBtn = document.getElementById('continueBtn');
+            const choicesContainer = document.getElementById('dialogueChoices');
             
             textbox.classList.remove('show');
             avatarImg.classList.remove('talking');
             continueBtn.classList.remove('show');
+            
+            // Ensure dialogue choices are hidden and cleared
+            choicesContainer.classList.remove('show');
+            setTimeout(() => {
+                choicesContainer.innerHTML = '';
+            }, 500);
+            
             gameState.canMove = true;
             gameState.dialogueActive = false;
         }
@@ -2735,8 +2753,6 @@
         }
 
         function checkProximityToBed() {
-            if (!gameState.allQuestsComplete) return;
-
             const herBox = getCharacterHitbox(gameState.herPosition.x, gameState.herPosition.y, 'her');
             const bedBox = { x: 90, y: 156, width: 156, height: 280 };
             
@@ -2757,7 +2773,7 @@
                 const bedHint = document.getElementById('bedHint');
                 const bed = document.getElementById('bed');
                 
-                if (isNear && !gameState.isSleeping) {
+                if (isNear && !gameState.isSleeping && gameState.allQuestsComplete) {
                     bedHint.classList.add('show');
                     bed.classList.add('interactive');
                 } else {
