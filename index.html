@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hi Baby! 💕 - Romance RPG</title>
+    <style>
+        @font-face {
+            font-family: 'Quaver';
+            src: url('https://raw.githubusercontent.com/Anonventions/cozygameplays/main/font/quaver.ttf') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        body {
+            font-family: 'Quaver', Arial, sans-serif;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+
+        /* Enhanced Loading Screen */
+        #loadScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s, transform 1s;
+        }
+
+        #loadScreen.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .loading-heart {
+            position: absolute;
+            font-size: 30px;
+            animation: floatHeart 6s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        #loadScreen h1 {
+            font-size: 72px;
+            color: white;
+            text-shadow: 0 0 20px rgba(255,255,255,0.8),
+                         0 0 40px rgba(255,105,180,0.6),
+                         0 0 60px rgba(255,20,147,0.4);
+            margin-bottom: 40px;
+            animation: titlePulse 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 0 0 20px rgba(255,255,255,0.8),
+                             0 0 40px rgba(255,105,180,0.6),
+                             0 0 60px rgba(255,20,147,0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                text-shadow: 0 0 30px rgba(255,255,255,1),
+                             0 0 60px rgba(255,105,180,0.8),
+                             0 0 90px rgba(255,20,147,0.6);
+            }
+        }
+
+        .instruction {
+            font-size: 24px;
+            color: white;
+            background: rgba(255,255,255,0.2);
+            padding: 20px 40px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            animation: instructionFloat 3s ease-in-out infinite;
+            z-index: 10;
+            margin-bottom: 50px;
+        }
+
+        @keyframes instructionFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .loading-bar-container {
+            width: 400px;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+
+        .loading-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b9d, #c06c84, #f67280, #355c7d);
+            background-size: 200% 100%;
+            animation: loadingProgress 2.5s ease-in-out forwards, shimmer 1.5s infinite;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255,107,157,0.6);
+        }
+
+        @keyframes loadingProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .loading-sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+            animation: sparkleFloat 4s infinite ease-in-out;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(var(--tx), var(--ty)) scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        /* RPG Stats Panel */
+        #statsPanel {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, rgba(138,43,226,0.95), rgba(75,0,130,0.95));
+            padding: 20px;
+            border-radius: 20px;
+            z-index: 500;
+            min-width: 280px;
+            box-shadow: 0 10px 30px rgba(138,43,226,0.5);
+            border: 3px solid rgba(186,85,211,0.6);
+        }
+
+        #statsPanel h3 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stat-row {
+            margin: 10px 0;
+            color: white;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff69b4, #ff1493);
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(255,105,180,0.8);
+        }
+
+        /* Inventory System */
+        #inventory {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, rgba(70,130,180,0.95), rgba(30,144,255,0.95));
+            padding: 15px;
+            border-radius: 15px;
+            z-index: 500;
+            min-width: 250px;
+            box-shadow: 0 10px 30px rgba(30,144,255,0.5);
+            border: 3px solid rgba(135,206,250,0.6);
+        }
+
+        #inventory h4 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .inventory-slot {
+            width: 50px;
+            height: 50px;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .inventory-slot:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+            border-color: #ffd700;
+        }
+
+        .inventory-slot.filled {
+            background: rgba(255,215,0,0.2);
+            border-color: #ffd700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Achievement System */
+        #achievementNotif {
+            position: fixed;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(255,215,0,0.95), rgba(255,165,0,0.95));
+            padding: 20px 30px;
+            border-radius: 15px;
+            z-index: 1500;
+            box-shadow: 0 10px 40px rgba(255,215,0,0.6);
+            border: 3px solid #ffd700;
+            transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            min-width: 350px;
+            text-align: center;
+        }
+
+        #achievementNotif.show {
+            top: 100px;
+        }
+
+        #achievementNotif h4 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        #achievementNotif p {
+            color: #fff;
+            font-size: 16px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Mini-Map */
+        #minimap {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 200px;
+            height: 150px;
+            background: rgba(0,0,0,0.7);
+            border: 3px solid rgba(255,182,193,0.8);
+            border-radius: 10px;
+            z-index: 500;
+            overflow: hidden;
+        }
+
+        #minimapCanvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Time & Weather System */
+        #timeWeather {
+            position: fixed;
+            top: 100px;
+            left: 25px;
+            background: linear-gradient(135deg, rgba(0,191,255,0.9), rgba(30,144,255,0.9));
+            padding: 15px 20px;
+            border-radius: 15px;
+            z-index: 500;
+            box-shadow: 0 5px 20px rgba(30,144,255,0.5);
+            border: 2px solid rgba(135,206,250,0.6);
+            min-width: 180px;
+        }
+
+        #timeWeather .time {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+        }
+
+        #timeWeather .weather {
+            color: #fff;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Player Name Labels */
+        .player-name {
+            position: absolute;
+            font-family: 'Quaver', Arial, sans-serif;
+            font-size: 18px;
+            color: #FFB6C1;
+            text-shadow: 
+                0 0 10px rgba(255,182,193,0.8),
+                0 0 20px rgba(255,182,193,0.6),
+                2px 2px 4px rgba(0,0,0,0.3);
+            pointer-events: none;
+            z-index: 100;
+            white-space: nowrap;
+            font-weight: bold;
+            animation: nameGlow 2s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes nameGlow {
+            0%, 100% {
+                text-shadow: 
+                    0 0 10px rgba(255,182,193,0.8),
+                    0 0 20px rgba(255,182,193,0.6),
+                    2px 2px 4px rgba(0,0,0,0.3);
+            }
+            50% {
+                text-shadow: 
+                    0 0 15px rgba(255,182,193,1),
+                    0 0 30px rgba(255,182,193,0.8),
+                    2px 2px 4px rgba(0,0,0,0.3);
+            }
+        }
+
+        /* Level Up Effect */
+        .levelup-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255,215,0,1);
+            z-index: 2000;
+            pointer-events: none;
+            animation: levelUpAnim 2s ease-out forwards;
+        }
+
+        @keyframes levelUpAnim {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1) translateY(-100px);
+            }
+        }
+
+        /* Game Container */
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #gameBg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://raw.githubusercontent.com/Anonventions/cozygameplays/main/game_bg.png');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            transition: filter 3s ease;
+        }
+
+        #gameBg.sleeping {
+            filter: brightness(0.4) saturate(0.7);
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(255,192,203,0.9), rgba(255,182,193,0.4));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 3;
+            animation: float 10s infinite ease-in-out;
+            box-shadow: 0 0 8px rgba(255,182,193,0.6);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translateY(-40px) translateX(15px) scale(1.2);
+                opacity: 0.9;
+            }
+        }
+
+        #room {
+            position: relative;
+            width: 828px;
+            height: 618px;
+            background-image: url('https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room.png');
+            background-size: 828px 618px;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 2;
+            box-shadow: 0 0 50px rgba(255,182,193,0.4), 0 0 100px rgba(255,105,180,0.2);
+        }
+
+        .room-item {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        #bed {
+            width: 156px;
+            height: 372px;
+            bottom: 90px;
+            left: 23px;
+            z-index: 10;
+            cursor: pointer;
+            transition: filter 0.3s;
+        }
+
+        #bed.interactive {
+            pointer-events: auto;
+        }
+
+        #bed.interactive:hover {
+            filter: brightness(1.2) drop-shadow(0 0 15px rgba(255,182,193,0.8));
+        }
+
+        #pcTable {
+            width: 390px;
+            height: 186px;
+            top: 100px;
+            right: 250px;
+            z-index: 10;
+        }
+
+        #gamingChair {
+            width: 96px;
+            height: 138px;
+            top: 190px;
+            right: 385px;
+            z-index: 11;
+        }
+
+        #rightSideTable {
+            width: 165px;
+            height: 393px;
+            bottom: 100px;
+            right: 12px;
+            z-index: 11;
+        }
+
+        .item {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 85;
+            width: 48px;
+            height: 48px;
+        }
+
+        .item:hover {
+            transform: translateY(-4px) scale(1.1);
+            filter: drop-shadow(0 8px 16px rgba(255,215,0,1)) brightness(1.3);
+        }
+
+        .item.collected {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0) rotate(360deg);
+            transition: all 0.5s ease;
+        }
+
+        #teddybear { top: 290px; left: 120px; }
+        #flower { bottom: 220px; left: 120px; }
+        #giftbox { top: 160px; right: 110px; }
+        #steak { bottom: 270px; right: 20px; }
+        #cake { top: 210px; right: 40px; }
+        #wine { bottom: 386px; right: 290px; }
+        #letter { top: 100px; left: 50%; transform: translateX(-50%); }
+
+        .character {
+            position: absolute;
+            transition: z-index 0s;
+        }
+
+        .character img {
+            display: block;
+        }
+
+        #her {
+            width: 90px;
+            height: 210px;
+            bottom: 250px;
+            left: 350px;
+        }
+
+        #herSprite {
+            width: 90px;
+            height: 210px;
+        }
+
+        #him {
+            width: 82px;
+            height: 233px;
+            bottom: 120px;
+            right: 250px;
+            cursor: pointer;
+            transition: filter 0.3s;
+            z-index: 11;
+        }
+
+        #himSprite {
+            width: 85px;
+            height: 233px;
+        }
+
+        #him:hover {
+            filter: brightness(1.25) drop-shadow(0 0 12px rgba(255,105,180,0.9));
+        }
+
+        #bedHint {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(138,43,226,0.95), rgba(75,0,130,0.95));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(138,43,226,0.6);
+            animation: bounce-hint 1s infinite;
+            z-index: 100;
+        }
+
+        #bedHint.show {
+            opacity: 1;
+        }
+
+        #proximityHint {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(255,105,180,0.95), rgba(255,20,147,0.95));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(255,105,180,0.6);
+            animation: bounce-hint 1s infinite;
+        }
+
+        @keyframes bounce-hint {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        #proximityHint.show {
+            opacity: 1;
+        }
+
+        #sleepOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 30, 0);
+            pointer-events: none;
+            z-index: 998;
+            transition: background 3s ease;
+        }
+
+        #sleepOverlay.active {
+            background: rgba(0, 0, 30, 0.7);
+        }
+
+        #sleepMessage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: white;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999;
+            text-shadow: 0 0 30px rgba(255,182,193,1),
+                         0 0 60px rgba(255,105,180,0.8);
+            transition: opacity 2s ease;
+        }
+
+        #sleepMessage.show {
+            opacity: 1;
+        }
+
+        .effect {
+            position: absolute;
+            pointer-events: none;
+            z-index: 200;
+            animation: floatUp 2.5s ease-out forwards;
+        }
+
+        .effect.heart-effect {
+            width: 48px;
+            height: 48px;
+        }
+
+        .effect.sparkle-effect {
+            width: 96px;
+            height: 96px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-90px) scale(2) rotate(20deg);
+            }
+        }
+
+        #textboxContainer {
+            position: fixed;
+            bottom: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 770px;
+            height: 260px;
+            z-index: 1000;
+            transition: bottom 0.45s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #textboxContainer.show {
+            bottom: 25px;
+        }
+
+        #textboxBg {
+            width: 770px;
+            height: 260px;
+            object-fit: fill;
+        }
+
+        #textboxContent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 30px 60px 50px 320px;
+        }
+
+        #avatarImg {
+            position: absolute;
+            left: -125px;
+            top: 20%;
+            transform: translateY(-50%);
+            width: 600px;
+            height: 300px;
+            object-fit: contain;
+        }
+
+        #dialogText {
+            font-size: 16px;
+            color: #2c2c2c;
+            line-height: 1.6;
+            flex: 1;
+            max-height: 150px;
+            overflow-y: auto;
+            word-wrap: break-word;
+            padding-right: 10px;
+        }
+
+        #dialogText::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #dialogText::-webkit-scrollbar-thumb {
+            background: rgba(255,105,180,0.5);
+            border-radius: 3px;
+        }
+
+        #continueBtn {
+            position: absolute;
+            bottom: 30px;
+            right: 50px;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Quaver', Arial;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 6px 18px rgba(255,105,180,0.5);
+        }
+
+        #continueBtn:hover {
+            background: linear-gradient(135deg, #ff1493, #c71585);
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(255,105,180,0.7);
+        }
+
+        #questIndicator {
+            position: fixed;
+            top: 220px;
+            left: 25px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(255,240,245,0.97));
+            padding: 24px;
+            border-radius: 20px;
+            z-index: 500;
+            min-width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(255,105,180,0.35);
+            border: 3px solid rgba(255,182,193,0.6);
+        }
+
+        #questIndicator h3 {
+            margin-bottom: 14px;
+            color: #ff1493;
+            font-size: 24px;
+            text-shadow: 0 2px 4px rgba(255,105,180,0.3);
+        }
+
+        .quest-item {
+            padding: 9px 0;
+            color: #555;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .quest-item.completed {
+            text-decoration: line-through;
+            color: #4caf50;
+        }
+
+        .quest-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .kiss-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,105,180,0.5) 0%, rgba(255,182,193,0.25) 50%, transparent 80%);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 999;
+            transition: opacity 0.7s;
+        }
+
+        .kiss-overlay.active {
+            opacity: 1;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .romantic-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(255,182,193,0.2) 0%, 
+                rgba(255,105,180,0.12) 30%, 
+                transparent 65%);
+            animation: glow 5s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+
+        .z-particle {
+            position: absolute;
+            font-size: 36px;
+            color: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            animation: floatZ 3s ease-in-out infinite;
+            text-shadow: 0 0 10px rgba(255,182,193,0.8);
+        }
+
+        @keyframes floatZ {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-80px) translateX(20px) scale(1.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadScreen">
+        <div class="loading-heart" style="left: 10%; animation-delay: 0s;">💕</div>
+        <div class="loading-heart" style="left: 20%; animation-delay: 1s;">💖</div>
+        <div class="loading-heart" style="left: 30%; animation-delay: 2s;">💗</div>
+        <div class="loading-heart" style="left: 40%; animation-delay: 0.5s;">💝</div>
+        <div class="loading-heart" style="left: 50%; animation-delay: 1.5s;">💘</div>
+        <div class="loading-heart" style="left: 60%; animation-delay: 2.5s;">💞</div>
+        <div class="loading-heart" style="left: 70%; animation-delay: 1s;">💓</div>
+        <div class="loading-heart" style="left: 80%; animation-delay: 2s;">💗</div>
+        <div class="loading-heart" style="left: 90%; animation-delay: 0.8s;">💕</div>
+        
+        <h1>Hi Baby! 💕</h1>
+        <div class="instruction">Use WASD or Arrow Keys to Move • Press I for Inventory • Press M for Map</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- RPG UI Elements -->
+    <div id="statsPanel">
+        <h3>💖 Diana's Stats</h3>
+        <div class="stat-row">
+            <span class="stat-label">Level:</span>
+            <span class="stat-value" id="playerLevel">1</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Love:</span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="loveBar" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">XP:</span>
+            <span class="stat-value"><span id="currentXP">0</span> / <span id="maxXP">100</span></span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Items Found:</span>
+            <span class="stat-value" id="itemsFound">0 / 7</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Achievements:</span>
+            <span class="stat-value" id="achievementCount">0 / 12</span>
+        </div>
+    </div>
+
+    <!-- Inventory Panel -->
+    <div id="inventory">
+        <h4>🎒 Inventory</h4>
+        <div class="inventory-grid" id="inventoryGrid"></div>
+    </div>
+
+    <!-- Time & Weather -->
+    <div id="timeWeather">
+        <div class="time" id="gameTime">18:30</div>
+        <div class="weather" id="gameWeather">🌙 Romantic Evening</div>
+    </div>
+
+    <!-- Achievement Notification -->
+    <div id="achievementNotif">
+        <h4>🏆 Achievement Unlocked!</h4>
+        <p id="achievementText">First Steps of Love</p>
+    </div>
+
+    <!-- Mini Map -->
+    <div id="minimap">
+        <canvas id="minimapCanvas" width="200" height="150"></canvas>
+    </div>
+
+    <!-- Sleep Overlay -->
+    <div id="sleepOverlay"></div>
+    <div id="sleepMessage">Sweet dreams princess 💕😴</div>
+
+    <!-- Kiss Overlay -->
+    <div id="kissOverlay" class="kiss-overlay"></div>
+
+    <!-- Game Container -->
+    <div id="gameContainer">
+        <div id="gameBg"></div>
+        
+        <div id="room">
+            <div class="romantic-glow"></div>
+            
+            <img id="bed" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/bed.png" alt="Bed">
+            <div id="bedHint">Click to Sleep Together 😴💕</div>
+            <img id="pcTable" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/pc_table.png" alt="PC Table">
+            <img id="gamingChair" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/gaming_chair.png" alt="Gaming Chair">
+            <img id="rightSideTable" class="room-item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/room%20items/right_side_table.png" alt="Side Table">
+
+            <img id="teddybear" class="item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/items/teddybear.png" alt="Teddy Bear">
+            <img id="flower" class="item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/items/flower.png" alt="Flower">
+            <img id="giftbox" class="item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/items/gifbox.png" alt="Gift Box">
+            <img id="steak" class="item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/items/steak.png" alt="Steak">
+            <img id="cake" class="item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/items/cake.png" alt="Cake">
+            <img id="wine" class="item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/items/wine.png" alt="Wine">
+            <img id="letter" class="item" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/items/letter.png" alt="Letter" style="display: none;">
+
+            <div id="her" class="character">
+                <img id="herSprite" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/front_stand.png">
+                <div id="herName" class="player-name">Diana</div>
+            </div>
+            
+            <div id="him" class="character">
+                <img id="himSprite" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/idle1.png">
+                <div id="himName" class="player-name">Amon</div>
+                <div id="proximityHint">Press Click to Kiss 💋</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Textbox -->
+    <div id="textboxContainer">
+        <img id="textboxBg" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/textbox/textbox.png" alt="Textbox">
+        <div id="textboxContent">
+            <img id="avatarImg" src="https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/talk_popup/him.png" alt="Avatar">
+            <div id="dialogText"></div>
+        </div>
+        <button id="continueBtn">Continue</button>
+    </div>
+
+    <!-- Quest Indicator -->
+    <div id="questIndicator">
+        <h3>💝 Quest List</h3>
+        <div id="questList"></div>
+    </div>
+
+    <script>
+        // Create sparkles
+        function createLoadingSparkles() {
+            const loadScreen = document.getElementById('loadScreen');
+            for (let i = 0; i < 50; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'loading-sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+                sparkle.style.setProperty('--ty', (Math.random() - 0.5) * 200 + 'px');
+                sparkle.style.animationDelay = Math.random() * 4 + 's';
+                loadScreen.appendChild(sparkle);
+            }
+        }
+        createLoadingSparkles();
+
+        // RPG Stats System
+        const rpgStats = {
+            level: 1,
+            xp: 0,
+            maxXp: 100,
+            love: 0,
+            maxLove: 100,
+            achievements: [],
+            inventory: []
+        };
+
+        const CHARACTER_HITBOX = {
+            her: { width: 45, height: 120, offsetX: 22, offsetY: 15 },
+            him: { width: 42, height: 120, offsetX: 21, offsetY: 15 }
+        };
+
+        const collisionBoxes = [
+            { x: 90, y: 156, width: 156, height: 280, name: 'bed' },
+            { x: 438, y: 180, width: 390, height: 150, name: 'pcTable' },
+            { x: 547, y: 290, width: 96, height: 100, name: 'chair' },
+            { x: 573, y: 120, width: 165, height: 300, name: 'sideTable' }
+        ];
+
+        const gameState = {
+            itemsCollected: [],
+            herPosition: { x: 350, y: 250 },
+            herDirection: 'front',
+            canMove: true,
+            allItemsCollected: false,
+            kissAnimating: false,
+            walkFrame: 0,
+            frameCounter: 0,
+            isNearHim: false,
+            isNearBed: false,
+            isSleeping: false,
+            allQuestsComplete: false,
+            himPosition: { x: 464, y: 240 },
+            gameTime: { hours: 18, minutes: 30 }
+        };
+
+        const quests = [
+            { id: 'teddybear', name: 'Find the Teddy Bear 🧸', completed: false, xp: 15 },
+            { id: 'flower', name: 'Find the Flower 🌸', completed: false, xp: 15 },
+            { id: 'giftbox', name: 'Find the Gift Box 🎁', completed: false, xp: 15 },
+            { id: 'steak', name: 'Find the Steak 🥩', completed: false, xp: 15 },
+            { id: 'cake', name: 'Find the Cake 🍰', completed: false, xp: 15 },
+            { id: 'wine', name: 'Find the Wine 🍷', completed: false, xp: 15 },
+            { id: 'letter', name: 'Read the Letter 💌', completed: false, xp: 20 },
+            { id: 'kiss', name: 'Kiss Him 💋', completed: false, xp: 30 },
+            { id: 'sleep', name: 'Sleep Together 😴', completed: false, xp: 50 }
+        ];
+
+        const achievements = [
+            { id: 'first_item', name: 'Treasure Hunter', desc: 'Find your first item', icon: '🔍' },
+            { id: 'half_items', name: 'Halfway There', desc: 'Collect 3 items', icon: '⭐' },
+            { id: 'all_items', name: 'Collector', desc: 'Find all items', icon: '💎' },
+            { id: 'first_kiss', name: 'First Kiss', desc: 'Share your first kiss', icon: '💋' },
+            { id: 'level_2', name: 'Growing Love', desc: 'Reach level 2', icon: '📈' },
+            { id: 'level_3', name: 'Deep Connection', desc: 'Reach level 3', icon: '💪' },
+            { id: 'max_love', name: 'Endless Love', desc: 'Fill the love meter', icon: '💖' },
+            { id: 'explorer', name: 'Explorer', desc: 'Walk 1000 steps', icon: '👣' },
+            { id: 'night_owl', name: 'Night Owl', desc: 'Play past midnight', icon: '🦉' },
+            { id: 'sweet_dreams', name: 'Sweet Dreams', desc: 'Sleep together', icon: '😴' },
+            { id: 'speed_runner', name: 'Speed Runner', desc: 'Complete all quests in under 10 minutes', icon: '⚡' },
+            { id: 'perfect_love', name: 'Perfect Love', desc: 'Complete everything', icon: '👑' }
+        ];
+
+        const itemMessages = {
+            teddybear: "I will always cherish the kid in you that never got to be loved properly",
+            flower: "I will always make sure you bloom pretty like your mother intended you to",
+            giftbox: "Consider this as me making it up for your birthday princess",
+            steak: "Can't forget your cravings baby :D",
+            cake: "To growing old with you, best blessing I've gotten",
+            wine: "To enjoying you timely, I'll be always here",
+            letter: "And at last, in so many different words, I'll choose a simplified version, I love you to the moon and back my pretty girl."
+        };
+
+        const itemIcons = {
+            teddybear: '🧸',
+            flower: '🌸',
+            giftbox: '🎁',
+            steak: '🥩',
+            cake: '🍰',
+            wine: '🍷',
+            letter: '💌'
+        };
+
+        // Initialize
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadScreen').classList.add('hidden');
+                setTimeout(startGame, 500);
+            }, 2500);
+        });
+
+        function startGame() {
+            updateQuestUI();
+            updateStatsUI();
+            initializeInventory();
+            startHimIdleAnimation();
+            createRomanticParticles();
+            updatePlayerNames();
+            startGameTime();
+            updateMinimap();
+            unlockAchievement('first_item', false); // Just for demo, remove in production
+        }
+
+        // Stats Update
+        function updateStatsUI() {
+            document.getElementById('playerLevel').textContent = rpgStats.level;
+            document.getElementById('currentXP').textContent = rpgStats.xp;
+            document.getElementById('maxXP').textContent = rpgStats.maxXp;
+            document.getElementById('loveBar').style.width = (rpgStats.love / rpgStats.maxLove * 100) + '%';
+            document.getElementById('itemsFound').textContent = gameState.itemsCollected.length + ' / 7';
+            document.getElementById('achievementCount').textContent = rpgStats.achievements.length + ' / ' + achievements.length;
+        }
+
+        // Add XP and check level up
+        function addXP(amount) {
+            rpgStats.xp += amount;
+            
+            if (rpgStats.xp >= rpgStats.maxXp) {
+                levelUp();
+            }
+            
+            updateStatsUI();
+        }
+
+        // Level Up
+        function levelUp() {
+            rpgStats.level++;
+            rpgStats.xp -= rpgStats.maxXp;
+            rpgStats.maxXp = Math.floor(rpgStats.maxXp * 1.5);
+            
+            // Show level up effect
+            const levelUpEffect = document.createElement('div');
+            levelUpEffect.className = 'levelup-effect';
+            levelUpEffect.textContent = `LEVEL ${rpgStats.level}!`;
+            document.body.appendChild(levelUpEffect);
+            
+            setTimeout(() => levelUpEffect.remove(), 2000);
+            
+            // Unlock level achievements
+            if (rpgStats.level === 2) unlockAchievement('level_2');
+            if (rpgStats.level === 3) unlockAchievement('level_3');
+            
+            updateStatsUI();
+        }
+
+        // Add Love
+        function addLove(amount) {
+            rpgStats.love = Math.min(rpgStats.maxLove, rpgStats.love + amount);
+            
+            if (rpgStats.love >= rpgStats.maxLove) {
+                unlockAchievement('max_love');
+            }
+            
+            updateStatsUI();
+        }
+
+        // Achievement System
+        function unlockAchievement(achievementId, showNotif = true) {
+            if (rpgStats.achievements.includes(achievementId)) return;
+            
+            rpgStats.achievements.push(achievementId);
+            const achievement = achievements.find(a => a.id === achievementId);
+            
+            if (showNotif && achievement) {
+                const notif = document.getElementById('achievementNotif');
+                document.getElementById('achievementText').textContent = achievement.icon + ' ' + achievement.name + ': ' + achievement.desc;
+                notif.classList.add('show');
+                
+                setTimeout(() => {
+                    notif.classList.remove('show');
+                }, 4000);
+            }
+            
+            updateStatsUI();
+        }
+
+        // Initialize Inventory
+        function initializeInventory() {
+            const grid = document.getElementById('inventoryGrid');
+            grid.innerHTML = '';
+            
+            for (let i = 0; i < 8; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'inventory-slot';
+                slot.id = `inv-slot-${i}`;
+                grid.appendChild(slot);
+            }
+        }
+
+        // Add to Inventory
+        function addToInventory(itemId) {
+            if (rpgStats.inventory.includes(itemId)) return;
+            
+            rpgStats.inventory.push(itemId);
+            const slotIndex = rpgStats.inventory.length - 1;
+            const slot = document.getElementById(`inv-slot-${slotIndex}`);
+            
+            if (slot) {
+                slot.textContent = itemIcons[itemId];
+                slot.classList.add('filled');
+                slot.title = itemId.charAt(0).toUpperCase() + itemId.slice(1);
+            }
+        }
+
+        // Game Time System
+        function startGameTime() {
+            setInterval(() => {
+                gameState.gameTime.minutes += 1;
+                if (gameState.gameTime.minutes >= 60) {
+                    gameState.gameTime.minutes = 0;
+                    gameState.gameTime.hours += 1;
+                    if (gameState.gameTime.hours >= 24) {
+                        gameState.gameTime.hours = 0;
+                    }
+                }
+                updateTimeDisplay();
+            }, 30000); // 1 game minute = 30 real seconds
+            
+            updateTimeDisplay();
+        }
+
+        function updateTimeDisplay() {
+            const h = gameState.gameTime.hours.toString().padStart(2, '0');
+            const m = gameState.gameTime.minutes.toString().padStart(2, '0');
+            document.getElementById('gameTime').textContent = `${h}:${m}`;
+            
+            // Update weather based on time
+            let weather = '🌙 Romantic Evening';
+            if (gameState.gameTime.hours >= 22 || gameState.gameTime.hours < 6) {
+                weather = '✨ Starry Night';
+                if (gameState.gameTime.hours === 0 && gameState.gameTime.minutes === 0) {
+                    unlockAchievement('night_owl');
+                }
+            } else if (gameState.gameTime.hours >= 18) {
+                weather = '🌙 Romantic Evening';
+            } else if (gameState.gameTime.hours >= 12) {
+                weather = '☀️ Cozy Afternoon';
+            } else {
+                weather = '🌅 Beautiful Morning';
+            }
+            
+            document.getElementById('gameWeather').textContent = weather;
+        }
+
+        // Minimap System
+        function updateMinimap() {
+            const canvas = document.getElementById('minimapCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            setInterval(() => {
+                // Clear
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                ctx.fillRect(0, 0, 200, 150);
+                
+                // Draw room outline
+                ctx.strokeStyle = '#FFB6C1';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(10, 10, 180, 130);
+                
+                // Draw Diana (player)
+                const dianaX = 10 + (gameState.herPosition.x / 828) * 180;
+                const dianaY = 10 + ((618 - gameState.herPosition.y) / 618) * 130;
+                ctx.fillStyle = '#FF69B4';
+                ctx.beginPath();
+                ctx.arc(dianaX, dianaY, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw Amon
+                const amonX = 10 + (gameState.himPosition.x / 828) * 180;
+                const amonY = 10 + ((618 - gameState.himPosition.y) / 618) * 130;
+                ctx.fillStyle = '#4169E1';
+                ctx.beginPath();
+                ctx.arc(amonX, amonY, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw items
+                ctx.fillStyle = '#FFD700';
+                ['teddybear', 'flower', 'giftbox', 'steak', 'cake', 'wine'].forEach(itemId => {
+                    if (!gameState.itemsCollected.includes(itemId)) {
+                        const item = document.getElementById(itemId);
+                        if (item && item.style.display !== 'none') {
+                            const rect = item.getBoundingClientRect();
+                            const roomRect = document.getElementById('room').getBoundingClientRect();
+                            const relX = rect.left - roomRect.left;
+                            const relY = rect.top - roomRect.top;
+                            const mapX = 10 + (relX / 828) * 180;
+                            const mapY = 10 + (relY / 618) * 130;
+                            ctx.fillRect(mapX - 2, mapY - 2, 4, 4);
+                        }
+                    }
+                });
+            }, 100);
+        }
+
+        function updatePlayerNames() {
+            const herName = document.getElementById('herName');
+            const himName = document.getElementById('himName');
+            
+            herName.style.left = '50%';
+            herName.style.transform = 'translateX(-50%)';
+            herName.style.top = '-25px';
+            
+            himName.style.left = '50%';
+            himName.style.transform = 'translateX(-50%)';
+            himName.style.top = '-25px';
+        }
+
+        function createRomanticParticles() {
+            const room = document.getElementById('room');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 6) + 's';
+                room.appendChild(particle);
+            }
+        }
+
+        let himIdleInterval;
+        function startHimIdleAnimation() {
+            let frame = 1;
+            himIdleInterval = setInterval(() => {
+                if (!gameState.kissAnimating && !gameState.isSleeping) {
+                    frame = frame === 1 ? 2 : 1;
+                    document.getElementById('himSprite').src = 
+                        `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/idle${frame}.png`;
+                }
+            }, 550);
+        }
+
+        function showDialog(message, avatar = 'him') {
+            const textbox = document.getElementById('textboxContainer');
+            const dialogText = document.getElementById('dialogText');
+            const avatarImg = document.getElementById('avatarImg');
+            
+            avatarImg.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/talk_popup/${avatar}.png`;
+            dialogText.textContent = message;
+            textbox.classList.add('show');
+            gameState.canMove = false;
+        }
+
+        function hideDialog() {
+            document.getElementById('textboxContainer').classList.remove('show');
+            gameState.canMove = true;
+        }
+
+        document.getElementById('continueBtn').addEventListener('click', () => {
+            hideDialog();
+        });
+
+        function getCharacterHitbox(x, y, type = 'her') {
+            const hitbox = CHARACTER_HITBOX[type];
+            return {
+                x: x + hitbox.offsetX,
+                y: 618 - y - hitbox.height - hitbox.offsetY,
+                width: hitbox.width,
+                height: hitbox.height
+            };
+        }
+
+        function checkCollision(newX, newY) {
+            const charBox = getCharacterHitbox(newX, newY, 'her');
+
+            for (let box of collisionBoxes) {
+                if (charBox.x < box.x + box.width &&
+                    charBox.x + charBox.width > box.x &&
+                    charBox.y < box.y + box.height &&
+                    charBox.y + charBox.height > box.y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function checkProximityToHim() {
+            const herBox = getCharacterHitbox(gameState.herPosition.x, gameState.herPosition.y, 'her');
+            const himBox = getCharacterHitbox(gameState.himPosition.x, gameState.himPosition.y, 'him');
+            
+            const herCenterX = herBox.x + herBox.width / 2;
+            const herCenterY = herBox.y + herBox.height / 2;
+            const himCenterX = himBox.x + himBox.width / 2;
+            const himCenterY = himBox.y + himBox.height / 2;
+            
+            const distance = Math.sqrt(
+                Math.pow(herCenterX - himCenterX, 2) + 
+                Math.pow(herCenterY - himCenterY, 2)
+            );
+            
+            const isNear = distance < 120;
+            
+            if (isNear !== gameState.isNearHim) {
+                gameState.isNearHim = isNear;
+                const hint = document.getElementById('proximityHint');
+                if (isNear && gameState.allItemsCollected && gameState.itemsCollected.includes('letter') && !quests.find(q => q.id === 'kiss').completed) {
+                    hint.classList.add('show');
+                } else {
+                    hint.classList.remove('show');
+                }
+            }
+        }
+
+        function checkProximityToBed() {
+            if (!gameState.allQuestsComplete) return;
+
+            const herBox = getCharacterHitbox(gameState.herPosition.x, gameState.herPosition.y, 'her');
+            const bedBox = { x: 90, y: 156, width: 156, height: 280 };
+            
+            const herCenterX = herBox.x + herBox.width / 2;
+            const herCenterY = herBox.y + herBox.height / 2;
+            const bedCenterX = bedBox.x + bedBox.width / 2;
+            const bedCenterY = bedBox.y + bedBox.height / 2;
+            
+            const distance = Math.sqrt(
+                Math.pow(herCenterX - bedCenterX, 2) + 
+                Math.pow(herCenterY - bedCenterY, 2)
+            );
+            
+            const isNear = distance < 150;
+            
+            if (isNear !== gameState.isNearBed) {
+                gameState.isNearBed = isNear;
+                const bedHint = document.getElementById('bedHint');
+                const bed = document.getElementById('bed');
+                
+                if (isNear && !gameState.isSleeping) {
+                    bedHint.classList.add('show');
+                    bed.classList.add('interactive');
+                } else {
+                    bedHint.classList.remove('show');
+                    if (!gameState.isSleeping) {
+                        bed.classList.remove('interactive');
+                    }
+                }
+            }
+        }
+
+        function updateZIndex() {
+            const her = document.getElementById('her');
+            const him = document.getElementById('him');
+            const himY = gameState.himPosition.y;
+            const herY = gameState.herPosition.y;
+            
+            if (herY < himY) {
+                her.style.zIndex = '40';
+            } else {
+                her.style.zIndex = '50';
+            }
+        }
+
+        const keys = {};
+        let stepCount = 0;
+
+        window.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        function updateMovement() {
+            if (!gameState.canMove || gameState.kissAnimating || gameState.isSleeping) {
+                requestAnimationFrame(updateMovement);
+                return;
+            }
+
+            const speed = 1.5;
+            let moved = false;
+            let newX = gameState.herPosition.x;
+            let newY = gameState.herPosition.y;
+            let newDirection = gameState.herDirection;
+
+            if (keys['w'] || keys['arrowup']) {
+                const testY = newY + speed;
+                if (!checkCollision(newX, testY)) {
+                    newY = testY;
+                    newDirection = 'back';                    moved = true;
+                }
+            }
+            if (keys['s'] || keys['arrowdown']) {
+                const testY = newY - speed;
+                if (!checkCollision(newX, testY)) {
+                    newY = testY;
+                    newDirection = 'front';
+                    moved = true;
+                }
+            }
+            if (keys['a'] || keys['arrowleft']) {
+                const testX = newX - speed;
+                if (!checkCollision(testX, newY)) {
+                    newX = testX;
+                    newDirection = 'left';
+                    moved = true;
+                }
+            }
+            if (keys['d'] || keys['arrowright']) {
+                const testX = newX + speed;
+                if (!checkCollision(testX, newY)) {
+                    newX = testX;
+                    newDirection = 'right';
+                    moved = true;
+                }
+            }
+
+            // Track steps for achievement
+            if (moved) {
+                stepCount++;
+                if (stepCount >= 1000) {
+                    unlockAchievement('explorer');
+                }
+            }
+
+            // Boundaries
+            newX = Math.max(20, Math.min(720, newX));
+            newY = Math.max(80, Math.min(500, newY));
+
+            gameState.herPosition.x = newX;
+            gameState.herPosition.y = newY;
+            document.getElementById('her').style.left = newX + 'px';
+            document.getElementById('her').style.bottom = newY + 'px';
+
+            // Update sprite
+            const herSprite = document.getElementById('herSprite');
+            
+            if (moved) {
+                gameState.herDirection = newDirection;
+                gameState.frameCounter++;
+                
+                if (gameState.frameCounter % 12 === 0) {
+                    gameState.walkFrame = (gameState.walkFrame + 1) % 3;
+                }
+                
+                if (gameState.walkFrame === 0) {
+                    herSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/${newDirection}_stand.png`;
+                } else {
+                    herSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/${newDirection}_walk${gameState.walkFrame}.png`;
+                }
+            } else {
+                gameState.walkFrame = 0;
+                gameState.frameCounter = 0;
+                herSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/${gameState.herDirection}_stand.png`;
+            }
+
+            checkProximityToHim();
+            checkProximityToBed();
+            updateZIndex();
+            requestAnimationFrame(updateMovement);
+        }
+        updateMovement();
+
+        // Item Collection
+        ['teddybear', 'flower', 'giftbox', 'steak', 'cake', 'wine', 'letter'].forEach(itemId => {
+            document.getElementById(itemId).addEventListener('click', () => {
+                collectItem(itemId);
+            });
+        });
+
+        function collectItem(itemId) {
+            if (gameState.itemsCollected.includes(itemId)) return;
+            
+            const item = document.getElementById(itemId);
+            item.classList.add('collected');
+            gameState.itemsCollected.push(itemId);
+            completeQuest(itemId);
+            
+            // Add to inventory and stats
+            addToInventory(itemId);
+            const quest = quests.find(q => q.id === itemId);
+            if (quest) {
+                addXP(quest.xp);
+                addLove(10);
+            }
+            
+            // Achievement tracking
+            if (gameState.itemsCollected.length === 1) {
+                unlockAchievement('first_item');
+            }
+            if (gameState.itemsCollected.length === 3) {
+                unlockAchievement('half_items');
+            }
+            
+            // Sparkle effects
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => {
+                    const randomX = item.offsetLeft + 24 + (Math.random() * 20 - 10);
+                    const randomY = item.offsetTop + 24 + (Math.random() * 20 - 10);
+                    createEffect('sparkle', randomX, randomY);
+                }, i * 120);
+            }
+            
+            showDialog(itemMessages[itemId], 'him');
+            
+            // Check if all items collected
+            const requiredItems = ['teddybear', 'flower', 'giftbox', 'steak', 'cake', 'wine'];
+            const allCollected = requiredItems.every(id => gameState.itemsCollected.includes(id));
+            
+            if (allCollected && !gameState.allItemsCollected) {
+                gameState.allItemsCollected = true;
+                unlockAchievement('all_items');
+                addLove(25);
+                
+                setTimeout(() => {
+                    const letter = document.getElementById('letter');
+                    letter.style.display = 'block';
+                    for (let i = 0; i < 6; i++) {
+                        setTimeout(() => {
+                            createEffect('sparkle', letter.offsetLeft + 24, letter.offsetTop + 24);
+                        }, i * 180);
+                    }
+                }, 1200);
+            }
+        }
+
+        // Him Click - Kiss Animation
+        document.getElementById('him').addEventListener('click', () => {
+            if (!gameState.isNearHim) {
+                showDialog("Finish your tasks and then come close to me, dummy!!! 💕", 'him');
+                return;
+            }
+            
+            if (!gameState.allItemsCollected || !gameState.itemsCollected.includes('letter')) {
+                showDialog("Find all the items and read the letter first, my love! 💕", 'him');
+                return;
+            }
+            
+            if (gameState.kissAnimating) return;
+            
+            playKissAnimation();
+        });
+
+        function playKissAnimation() {
+            gameState.kissAnimating = true;
+            gameState.canMove = false;
+            
+            const himSprite = document.getElementById('himSprite');
+            const herSprite = document.getElementById('herSprite');
+            const overlay = document.getElementById('kissOverlay');
+            const hint = document.getElementById('proximityHint');
+            
+            hint.classList.remove('show');
+            clearInterval(himIdleInterval);
+            
+            // Kiss sequence
+            let kissFrame = 1;
+            const kissInterval = setInterval(() => {
+                himSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/beingkissed${kissFrame}.png`;
+                herSprite.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/kiss${kissFrame}_right.png`;
+                
+                if (kissFrame === 2) {
+                    overlay.classList.add('active');
+                    // Create wave of hearts
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(() => {
+                            const him = document.getElementById('him');
+                            const angle = (Math.PI * 2 * i) / 10;
+                            const radius = 40 + Math.random() * 20;
+                            const offsetX = Math.cos(angle) * radius;
+                            const offsetY = Math.sin(angle) * radius;
+                            createEffect('heart', 
+                                him.offsetLeft + 42 + offsetX, 
+                                him.offsetTop - 30 + offsetY);
+                        }, i * 130);
+                    }
+                }
+                
+                kissFrame++;
+                if (kissFrame > 3) {
+                    clearInterval(kissInterval);
+                    
+                    setTimeout(() => {
+                        overlay.classList.remove('active');
+                        himSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/idle1.png';
+                        herSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/smile_front.png';
+                        
+                        showDialog("Thank you for everything, my beautiful girl. I love you so much! Now we can rest together... 💕💕💕", 'him');
+                        completeQuest('kiss');
+                        
+                        // RPG rewards for kiss
+                        const quest = quests.find(q => q.id === 'kiss');
+                        if (quest) {
+                            addXP(quest.xp);
+                            addLove(30);
+                        }
+                        unlockAchievement('first_kiss');
+                        
+                        checkAllQuestsComplete();
+                        
+                        setTimeout(() => {
+                            gameState.kissAnimating = false;
+                            gameState.canMove = true;
+                            startHimIdleAnimation();
+                        }, 3000);
+                    }, 1200);
+                }
+            }, 750);
+        }
+
+        function checkAllQuestsComplete() {
+            const allComplete = quests
+                .filter(q => q.id !== 'sleep')
+                .every(q => q.completed);
+            
+            if (allComplete) {
+                gameState.allQuestsComplete = true;
+            }
+        }
+
+        // Bed Click - Sleep Animation
+        document.getElementById('bed').addEventListener('click', () => {
+            if (!gameState.allQuestsComplete) {
+                showDialog("Complete all the quests first, my love! 💕", 'him');
+                return;
+            }
+
+            if (!gameState.isNearBed) {
+                showDialog("Come closer to the bed first, baby! 💕", 'him');
+                return;
+            }
+            
+            if (gameState.isSleeping) return;
+            
+            playSleepAnimation();
+        });
+
+        function playSleepAnimation() {
+            gameState.isSleeping = true;
+            gameState.canMove = false;
+            
+            const himSprite = document.getElementById('himSprite');
+            const herSprite = document.getElementById('herSprite');
+            const her = document.getElementById('her');
+            const him = document.getElementById('him');
+            const bedHint = document.getElementById('bedHint');
+            const sleepOverlay = document.getElementById('sleepOverlay');
+            const sleepMessage = document.getElementById('sleepMessage');
+            const gameBg = document.getElementById('gameBg');
+            const herName = document.getElementById('herName');
+            const himName = document.getElementById('himName');
+            
+            bedHint.classList.remove('show');
+            clearInterval(himIdleInterval);
+            
+            showDialog("Let's sleep together, my love. You've done so well today... 💕😴", 'him');
+            
+            setTimeout(() => {
+                hideDialog();
+                
+                // Hide names with fade
+                herName.style.opacity = '0';
+                himName.style.opacity = '0';
+                
+                // Move characters to bed
+                her.style.transition = 'all 1.5s ease';
+                him.style.transition = 'all 1.5s ease';
+                her.style.zIndex = '15';
+                him.style.zIndex = '15';
+                
+                // Position them on the bed
+                her.style.left = '95px';
+                her.style.bottom = '130px';
+                him.style.left = '50px';
+                him.style.bottom = '130px';
+                
+                // Change to laying sprites after movement (30x70 * 3 = 90x210)
+                setTimeout(() => {
+                    // Her uses layonbed.png, Him uses laying.png
+                    herSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/her/layonbed.png';
+                    himSprite.src = 'https://raw.githubusercontent.com/Anonventions/cozygameplays/main/characters/him/laying.png';
+                    
+                    // Keep size at 90x210 (30x70 * 3)
+                    herSprite.style.width = '90px';
+                    herSprite.style.height = '210px';
+                    her.style.width = '90px';
+                    her.style.height = '210px';
+                    
+                    himSprite.style.width = '90px';
+                    himSprite.style.height = '210px';
+                    him.style.width = '90px';
+                    him.style.height = '210px';
+                    
+                }, 1500);
+                
+                // Darken the scene
+                setTimeout(() => {
+                    sleepOverlay.classList.add('active');
+                    gameBg.classList.add('sleeping');
+                    
+                    // Show sleep message
+                    setTimeout(() => {
+                        sleepMessage.classList.add('show');
+                        
+                        // Create floating Z particles
+                        createSleepParticles();
+                        
+                        // Complete sleep quest
+                        completeQuest('sleep');
+                        
+                        // RPG rewards
+                        const quest = quests.find(q => q.id === 'sleep');
+                        if (quest) {
+                            addXP(quest.xp);
+                            addLove(50);
+                        }
+                        unlockAchievement('sweet_dreams');
+                        
+                        // Check if all achievements unlocked
+                        if (rpgStats.achievements.length === achievements.length) {
+                            setTimeout(() => unlockAchievement('perfect_love'), 2000);
+                        }
+                        
+                    }, 2000);
+                }, 2000);
+                
+            }, 3000);
+        }
+
+        // Create sleeping Z particles
+        function createSleepParticles() {
+            const room = document.getElementById('room');
+            
+            setInterval(() => {
+                if (gameState.isSleeping) {
+                    // Create Z above Her
+                    const zHer = document.createElement('div');
+                    zHer.className = 'z-particle';
+                    zHer.textContent = 'Z';
+                    zHer.style.left = '85px';
+                    zHer.style.bottom = '450px';
+                    zHer.style.animationDelay = '0s';
+                    room.appendChild(zHer);
+                    setTimeout(() => zHer.remove(), 3000);
+                    
+                    // Create Z above Him
+                    setTimeout(() => {
+                        const zHim = document.createElement('div');
+                        zHim.className = 'z-particle';
+                        zHim.textContent = 'Z';
+                        zHim.style.left = '130px';
+                        zHim.style.bottom = '450px';
+                        zHim.style.animationDelay = '0s';
+                        room.appendChild(zHim);
+                        setTimeout(() => zHim.remove(), 3000);
+                    }, 800);
+                }
+            }, 2500);
+        }
+
+        // Effects
+        function createEffect(type, x, y) {
+            const effect = document.createElement('img');
+            effect.className = type === 'heart' ? 'effect heart-effect' : 'effect sparkle-effect';
+            effect.src = `https://raw.githubusercontent.com/Anonventions/cozygameplays/main/effects/${type}.png`;
+            effect.style.left = x + 'px';
+            effect.style.top = y + 'px';
+            document.getElementById('room').appendChild(effect);
+            
+            setTimeout(() => effect.remove(), 2500);
+        }
+
+        // Quest System
+        function completeQuest(questId) {
+            const quest = quests.find(q => q.id === questId);
+            if (quest && !quest.completed) {
+                quest.completed = true;
+                updateQuestUI();
+            }
+        }
+
+        function updateQuestUI() {
+            const questList = document.getElementById('questList');
+            questList.innerHTML = quests.map(quest => 
+                `<div class="quest-item ${quest.completed ? 'completed' : ''}">
+                    <span class="quest-icon">${quest.completed ? '✓' : '○'}</span>
+                    ${quest.name}
+                </div>`
+            ).join('');
+        }
+
+        // Sound effects (optional - can be muted)
+        function playSound(soundType) {
+            // Placeholder for sound system
+            // You can add actual sound files later
+            console.log(`Playing sound: ${soundType}`);
+        }
+    </script>
+</body>
+</html>
